@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <rect width="600" height="400" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="20" y="20" width="560" height="360" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <rect x="40" y="40" width="520" height="60" rx="8" fill="#1e293b"/>
+  <text x="300" y="78" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">MANUFACTURING & CONSUMER CARE PANEL - BACK</text>
+  
+  <rect x="40" y="120" width="520" height="230" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="60" y="150" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">MANUFACTURED & PACKED BY:</text>
+  <text x="60" y="172" font-family="Arial, sans-serif" font-size="12" fill="#334155">Himalayan Agro Foods Ltd., Plot No. 42, Sector 8, Industrial Area, Manesar, Haryana - 122050</text>
+  
+  <text x="60" y="205" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">MONTH & YEAR OF MANUFACTURE:</text>
+  <text x="60" y="227" font-family="Arial, sans-serif" font-size="12" fill="#334155">Mfg Date: 08/2026 | Batch No: HA-2608-X</text>
+
+  <text x="60" y="260" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">CONSUMER CARE DETAILS:</text>
+  <text x="60" y="282" font-family="Arial, sans-serif" font-size="12" fill="#334155">Executive: Grievance Officer | Toll-Free: 1800-200-1122 | Email: customercare@himalayanagro.in</text>
+  
+  <text x="60" y="315" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0d4734">COUNTRY OF ORIGIN: INDIA</text>
+</svg>

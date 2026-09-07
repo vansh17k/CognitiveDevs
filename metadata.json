@@ -1,0 +1,6 @@
+{
+  "name": "LexiScan",
+  "description": "AI-assisted compliance screening for packaged commodities under the Legal Metrology (Packaged Commodities) Rules, 2011.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
