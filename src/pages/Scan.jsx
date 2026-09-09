@@ -310,19 +310,19 @@ export const Scan = ({ defaultTab = 'physical' }) => {
           >
             <div>
               <div className="flex items-center justify-between gap-2 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-100 text-[#0d4734] flex items-center justify-center shadow-2xs shrink-0">
-                    <Globe className="w-6 h-6" />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-11 h-11 rounded-xl bg-emerald-100 text-[#0d4734] flex items-center justify-center shadow-2xs shrink-0">
+                    <Globe className="w-5 h-5" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-base sm:text-lg font-bold text-slate-900">E-Com Link Scan</p>
-                      <span className="text-[10px] bg-emerald-700 text-white font-bold px-2 py-0.5 rounded-full font-mono">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-base font-bold text-slate-900 leading-tight">E-Com Link Scan</p>
+                      <span className="text-[10px] bg-emerald-700 text-white font-bold px-2 py-0.5 rounded-full font-mono whitespace-nowrap shrink-0">
                         Rule 6(10)
                       </span>
                     </div>
-                    <span className="text-xs text-slate-600 block">
-                      Auto-detects marketplace from product link
+                    <span className="text-xs text-slate-600 block truncate mt-0.5">
+                      Auto-detects marketplace from link
                     </span>
                   </div>
                 </div>
@@ -336,32 +336,32 @@ export const Scan = ({ defaultTab = 'physical' }) => {
               >
                 {/* Input with deep green rounded border and auto-detect badge */}
                 <div className="relative w-full">
-                  <Link2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Link2 className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="url"
                     value={ecomUrl}
                     onChange={(e) => setEcomUrl(e.target.value)}
-                    placeholder="Paste product link (Amazon, Blinkit, Flipkart, Zepto, Swiggy)..."
-                    className="w-full pl-10 pr-32 py-2.5 bg-white border-2 border-[#0d4734] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0d4734]/30 font-mono shadow-2xs placeholder:text-slate-400"
+                    placeholder="Paste product link (Amazon, Blinkit, etc.)..."
+                    className="w-full pl-9 pr-28 py-2.5 bg-white border-2 border-[#0d4734] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0d4734]/30 font-mono shadow-2xs placeholder:text-slate-400"
                   />
                   {detectedMarketplace ? (
-                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 border rounded-lg text-xs font-bold shadow-2xs flex items-center gap-1.5 ${detectedMarketplace.badge}`}>
+                    <span className={`absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-0.5 border rounded-lg text-xs font-bold shadow-2xs flex items-center gap-1 shrink-0 whitespace-nowrap ${detectedMarketplace.badge}`}>
                       <span>{detectedMarketplace.logo}</span>
                       <span>{detectedMarketplace.name}</span>
                     </span>
                   ) : (
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg text-xs font-medium">
+                    <span className="absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-0.5 bg-slate-100 text-slate-500 rounded-lg text-xs font-medium shrink-0 whitespace-nowrap">
                       Auto-Detect
                     </span>
                   )}
                 </div>
 
-                {/* Primary & Secondary Action Buttons */}
-                <div className="flex items-center gap-2 w-full">
+                {/* Action Button */}
+                <div className="w-full">
                   <button
                     type="submit"
                     disabled={isFetchingUrl}
-                    className="flex-1 py-2.5 px-4 bg-[#0d4734] hover:bg-[#083325] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+                    className="w-full py-2.5 px-4 bg-[#0d4734] hover:bg-[#083325] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
                   >
                     {isFetchingUrl ? (
                       <>
@@ -375,16 +375,6 @@ export const Scan = ({ defaultTab = 'physical' }) => {
                       </>
                     )}
                   </button>
-
-                  <button
-                    type="button"
-                    disabled={isFetchingUrl}
-                    onClick={(e) => handleFetchCustomUrl(e, false)}
-                    className="py-2.5 px-4 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold rounded-xl shadow-2xs transition-colors flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap"
-                    title="Preview digital listing details before running compliance audit"
-                  >
-                    <span>Preview PDP</span>
-                  </button>
                 </div>
               </form>
             </div>
@@ -392,7 +382,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
             {/* Demo URL Shortcuts */}
             <div className="mt-3 pt-3 border-t border-slate-200/80">
               <span className="text-[11px] font-bold text-slate-700 block mb-1.5">Quick Test Links:</span>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <button
                   type="button"
                   onClick={(e) => {
@@ -400,7 +390,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
                     const demoUrl = 'https://www.amazon.in/Lays-Hot-Sweet-Chilli-52g/dp/B083F51877';
                     setEcomUrl(demoUrl);
                   }}
-                  className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                  className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-[11px] font-semibold cursor-pointer transition-colors"
                 >
                   📦 Lay's 52g (Amazon)
                 </button>
@@ -411,7 +401,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
                     const demoUrl = 'https://blinkit.com/prn/haldirams-bhujia-sev/prid/128392';
                     setEcomUrl(demoUrl);
                   }}
-                  className="px-2.5 py-1 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 border border-yellow-300 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                  className="px-2 py-1 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 border border-yellow-300 rounded-lg text-[11px] font-semibold cursor-pointer transition-colors"
                 >
                   ⚡ Bhujia (Blinkit)
                 </button>
@@ -422,7 +412,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
                     const demoUrl = 'https://www.zeptonow.com/pn/cadbury-dairy-milk-silk-150g/pvid/84210';
                     setEcomUrl(demoUrl);
                   }}
-                  className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-300 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                  className="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-300 rounded-lg text-[11px] font-semibold cursor-pointer transition-colors"
                 >
                   🟣 Dairy Milk (Zepto)
                 </button>

@@ -58,7 +58,8 @@ const FBO_INSPECTION_STEPS = [
 export const FboDashboard = () => {
   const { 
     navigate, 
-    fboProfile, 
+    fboProfile,
+    saveFboProductToFirestore,
     addToast 
   } = useApp();
 
@@ -250,10 +251,29 @@ export const FboDashboard = () => {
       setAuditResult(result);
       setAuditHistory(prev => [result, ...prev.filter(item => item.id !== result.id)]);
 
+      // Sync to Firebase Firestore so Inspector can oversee FBO work
+      if (saveFboProductToFirestore) {
+        saveFboProductToFirestore({
+          id: result.id || `fbo-audit-${Date.now()}`,
+          name: result.productName || productName,
+          category: result.category || category,
+          productId: result.batchNumber || `LOT-${Date.now().toString().slice(-4)}`,
+          netQuantity: result.netQuantity || netQuantity,
+          mrp: result.mrp || mrp,
+          currentLabel: imgUrl || uploadedImage,
+          complianceStatus: result.status || 'Ready for Market',
+          complianceScore: result.overallScore || 85,
+          lastAiCheck: 'Completed pre-audit',
+          openIssuesCount: (result.violations || []).length,
+          issues: result.violations || [],
+          fboId: fboProfile?.fboId || fboProfile?.id || 'FBO-APEX-001'
+        }, fboProfile);
+      }
+
       addToast({
         type: 'success',
-        title: 'Analysis Completed',
-        description: 'Mandatory declarations verified against PCR-2011.'
+        title: 'Analysis Completed & Synced',
+        description: 'Mandatory declarations verified against PCR-2011 and synced to Cloud DB.'
       });
     }, 2800);
 

@@ -833,6 +833,11 @@ export const AppProvider = ({ children }) => {
     setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
     setInspections(prev => prev.map(i => i.id === updatedInspection.id ? updatedInspection : i));
 
+    // Sync to Firestore for Inspector/DGM
+    if (currentUser?.role !== 'consumer') {
+      saveProductToFirestore(updatedProduct, updatedInspection, currentUser);
+    }
+
     if (selectedViolation && selectedViolation.id === violationId) {
       setSelectedViolation(updatedViolations.find(v => v.id === violationId) || null);
     }
@@ -865,6 +870,10 @@ export const AppProvider = ({ children }) => {
     setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
     setInspections(prev => prev.map(i => i.id === updatedInspection.id ? updatedInspection : i));
 
+    if (currentUser?.role !== 'consumer') {
+      saveProductToFirestore(updatedProduct, updatedInspection, currentUser);
+    }
+
     setIsManualReviewModalOpen(false);
     addToast({
       type: 'info',
@@ -874,13 +883,34 @@ export const AppProvider = ({ children }) => {
   };
 
   const updateProductRemarks = (productId, remarks) => {
-    setProducts(prev => prev.map(p => p.id === productId ? { ...p, inspectorRemarks: remarks } : p));
-    setInspections(prev => prev.map(i => i.productId === productId ? { ...i, inspectorRemarks: remarks } : i));
+    let targetProd = null;
+    let targetInsp = null;
+
+    setProducts(prev => prev.map(p => {
+      if (p.id === productId) {
+        targetProd = { ...p, inspectorRemarks: remarks };
+        return targetProd;
+      }
+      return p;
+    }));
+
+    setInspections(prev => prev.map(i => {
+      if (i.productId === productId) {
+        targetInsp = { ...i, inspectorRemarks: remarks };
+        return targetInsp;
+      }
+      return i;
+    }));
+
     if (currentScan?.product.id === productId) {
       setCurrentScan({
         product: { ...currentScan.product, inspectorRemarks: remarks },
         inspection: { ...currentScan.inspection, inspectorRemarks: remarks }
       });
+    }
+
+    if (currentUser?.role !== 'consumer' && targetProd) {
+      saveProductToFirestore(targetProd, targetInsp || { id: `INSP-${productId}`, productId }, currentUser);
     }
     addToast({
       type: 'success',
@@ -944,46 +974,32 @@ export const AppProvider = ({ children }) => {
   const isConsumer = currentUser?.role === 'consumer';
   const isFBO = currentUser?.role === 'fbo';
 
-  // Role Scoping:
-  // DGM: Poora Access (all products, inspections, requests statewide)
-  // Inspector: Restricted Access ("sirf vhi data rhega jo check krega")
-  // Consumer: Zero Data Saved ("consumer ka data save nhi hoga")
+  // Role Scoping per User Directive:
+  // - Inspector & DGM: ALL access ("inspector hav all the access like he see the work of fbo")
+  // - FBO: Strictly scoped to ONLY their own company's products & notices ("only access that things which fbo person has done they will not get access of world wide")
+  // - Consumer: Zero database records ("database will not be for citizen like they will check instantly and they can convert it into pdf instantly")
   const visibleProducts = useMemo(() => {
-    if (isDGM) return products;
-    if (isInspector) {
-      return products.filter(p => 
-        p.inspectorId === currentUser?.id || 
-        p.inspectorName === currentUser?.name ||
-        p.inspectorEmail === currentUser?.email ||
-        (!p.inspectorId && (p.id?.includes('001') || p.name?.includes('Amul')))
-      );
+    if (isDGM || isInspector) return products;
+    if (isFBO) {
+      const myFboId = fboProfile?.fboId || fboProfile?.id || 'FBO-APEX-001';
+      return products.filter(p => p.fboId === myFboId);
     }
     return [];
-  }, [products, currentUser, isDGM, isInspector]);
+  }, [products, isDGM, isInspector, isFBO, fboProfile]);
 
   const visibleInspections = useMemo(() => {
-    if (isDGM) return inspections;
-    if (isInspector) {
-      return inspections.filter(i => 
-        i.inspectorId === currentUser?.id || 
-        i.inspectorName === currentUser?.name ||
-        i.inspectorEmail === currentUser?.email ||
-        (!i.inspectorId && (i.id?.includes('001') || i.productId?.includes('001')))
-      );
+    if (isDGM || isInspector) return inspections;
+    if (isFBO) {
+      const myFboId = fboProfile?.fboId || fboProfile?.id || 'FBO-APEX-001';
+      return inspections.filter(i => i.fboId === myFboId);
     }
     return [];
-  }, [inspections, currentUser, isDGM, isInspector]);
+  }, [inspections, isDGM, isInspector, isFBO, fboProfile]);
 
   const visibleRequests = useMemo(() => {
-    if (isDGM) return inspectorRequests;
-    if (isInspector) {
-      return inspectorRequests.filter(r => 
-        r.inspectorId === currentUser?.id || 
-        r.inspectorEmail === currentUser?.email
-      );
-    }
+    if (isDGM || isInspector) return inspectorRequests;
     return [];
-  }, [inspectorRequests, currentUser, isDGM, isInspector]);
+  }, [inspectorRequests, isDGM, isInspector]);
 
   return (
     <AppContext.Provider
