@@ -34,6 +34,7 @@ export const exportReportToPDF = (product, inspection, reportItems, remarks = ''
     const nonCompliantCount = reportItems.filter(i => i.status === 'Non-Compliant').length;
     const compliantCount = reportItems.filter(i => i.status === 'Compliant').length;
     const isCompliant = nonCompliantCount === 0;
+    const isConsumer = !!(product?.isConsumerScan || inspection?.isConsumerScan);
 
     // Header Color Accent Bar
     doc.setFillColor(13, 71, 52); // #0d4734 forest green
@@ -43,14 +44,26 @@ export const exportReportToPDF = (product, inspection, reportItems, remarks = ''
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(13);
-    doc.text('LEGAL METROLOGY COMPLIANCE & VERIFICATION SYSTEM', pageWidth / 2, 10, { align: 'center' });
+    doc.text(
+      isConsumer ? 'CITIZEN PACKAGING VERIFICATION CERTIFICATE' : 'LEGAL METROLOGY COMPLIANCE & VERIFICATION SYSTEM',
+      pageWidth / 2, 
+      10, 
+      { align: 'center' }
+    );
 
     doc.setFontSize(8.5);
     doc.setFont('helvetica', 'normal');
     doc.text('GOVERNMENT OF INDIA • DEPARTMENT OF CONSUMER AFFAIRS • PCR-2011', pageWidth / 2, 16, { align: 'center' });
 
     doc.setFontSize(7.5);
-    doc.text('OFFICIAL STATUTORY PACKAGING INSPECTION REPORT', pageWidth / 2, 21, { align: 'center' });
+    doc.text(
+      isConsumer 
+        ? 'OFFICIAL CITIZEN VERIFICATION CERTIFICATE (ZERO DATA RETENTION)' 
+        : 'OFFICIAL STATUTORY PACKAGING INSPECTION REPORT', 
+      pageWidth / 2, 
+      21, 
+      { align: 'center' }
+    );
 
     // Metadata Section
     let currentY = 32;
@@ -111,10 +124,16 @@ export const exportReportToPDF = (product, inspection, reportItems, remarks = ''
 
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(71, 85, 105);
-    doc.text('Officer / Field:', rightColX, currentY + 21);
+    doc.text(isConsumer ? 'Verification:' : 'Officer / Field:', rightColX, currentY + 21);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    doc.text(String(inspection?.inspectorName || 'Field Inspector (State Metrology)'), rightColX + 28, currentY + 21);
+    doc.text(
+      isConsumer 
+        ? 'Citizen Instant Verification (Zero Data Retention)' 
+        : String(inspection?.inspectorName || 'Field Inspector (State Metrology)'), 
+      rightColX + 28, 
+      currentY + 21
+    );
 
     // Row 4
     doc.setFont('helvetica', 'bold');
@@ -251,14 +270,14 @@ export const exportReportToPDF = (product, inspection, reportItems, remarks = ''
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(71, 85, 105);
-    doc.text('Inspecting Officer Signature', 14, finalY + 16);
-    doc.text('DGM / Competent Authority Sign-off', pageWidth - 70, finalY + 16);
+    doc.text(isConsumer ? 'Public Verification Authenticator' : 'Inspecting Officer Signature', 14, finalY + 16);
+    doc.text(isConsumer ? 'National Legal Metrology Digital Seal' : 'DGM / Competent Authority Sign-off', pageWidth - 70, finalY + 16);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(148, 163, 184);
     doc.text(`Digital Seal ID: LEXISCAN-${Math.floor(100000 + Math.random() * 900000)}`, 14, finalY + 20);
-    doc.text('Certified Electronic Verification Record', pageWidth - 70, finalY + 20);
+    doc.text(isConsumer ? 'Citizen Zero-Data-Retention Certified' : 'Certified Electronic Verification Record', pageWidth - 70, finalY + 20);
 
     // Footer on all pages
     const totalPages = doc.internal.getNumberOfPages();

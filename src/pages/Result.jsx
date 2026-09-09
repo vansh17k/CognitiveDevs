@@ -30,12 +30,19 @@ export const Result = () => {
 
   const handleDownloadPDF = () => {
     const items = getProductReportItems(product);
-    const ok = exportReportToPDF(product, inspection, items, product.inspectorRemarks || '');
+    const ok = exportReportToPDF(
+      { ...product, isConsumerScan: isConsumer }, 
+      { ...inspection, isConsumerScan: isConsumer }, 
+      items, 
+      product.inspectorRemarks || ''
+    );
     if (ok && addToast) {
       addToast({
         type: 'success',
-        title: 'PDF Report Downloaded',
-        description: `Official statutory report saved for ${product.name}.`
+        title: isConsumer ? 'Verification Certificate Downloaded' : 'PDF Report Downloaded',
+        description: isConsumer 
+          ? `Official Citizen Verification Certificate saved for ${product.name}.`
+          : `Official statutory report saved for ${product.name}.`
       });
     }
   };

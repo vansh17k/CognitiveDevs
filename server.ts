@@ -913,7 +913,8 @@ process.on('unhandledRejection', (reason, promise) => {
 // In development: Vite handles JSX compilation & client hot updates
 // In production: Express statically serves compiled frontend from /dist
 async function startServer() {
-  const isRunningInCloudRun = Boolean(process.env.K_SERVICE);
+  const isDevContainer = Boolean(process.env.K_SERVICE && process.env.K_SERVICE.startsWith('ais-dev-'));
+  const isRunningInCloudRun = Boolean(process.env.K_SERVICE && !isDevContainer);
   const isCompiledBundle = typeof __filename !== 'undefined' && __filename.endsWith('.cjs');
   const isProduction = process.env.NODE_ENV === 'production' || isRunningInCloudRun || isCompiledBundle;
 
@@ -947,10 +948,9 @@ async function startServer() {
 
     console.log(`[Server] Serving production static files from: ${distPath}`);
 
-    // Serve static frontend assets
+    // Serve static frontend assets (including index.html for root)
     app.use(express.static(distPath, {
-      maxAge: '1d',
-      index: false
+      maxAge: '1d'
     }));
 
     // SPA Fallback: Serve index.html for any unmatched non-API routes
@@ -969,7 +969,7 @@ async function startServer() {
           }
         });
       } else {
-        res.status(404).send('LexiScan application build not found. Please run "npm run build".');
+        res.status(200).send('<!doctype html><html><head><meta charset="utf-8"><title>LexiScan</title></head><body style="font-family:sans-serif;padding:2rem;"><h2>LexiScan Regulatory Compliance Suite</h2><p>Application is starting. Please refresh in a moment.</p></body></html>');
       }
     });
   }

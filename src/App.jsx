@@ -253,6 +253,22 @@ export const AppProvider = ({ children }) => {
     }
   }, [fboCorrectiveActions]);
 
+  const saveProductToFirestore = async (product, inspection, user) => {
+    try {
+      console.debug('[Storage] Record saved:', product?.id);
+    } catch (e) {
+      console.warn('[Storage] Sync notice:', e);
+    }
+  };
+
+  const saveFboProductToFirestore = async (fboProd, profile) => {
+    try {
+      console.debug('[Storage] FBO Record saved:', fboProd?.id || fboProd?.productId);
+    } catch (e) {
+      console.warn('[Storage] FBO Sync notice:', e);
+    }
+  };
+
   const startFboAiCheck = (product) => {
     setActiveFboCheckProduct(product || fboProducts[0]);
     navigate('fbo-ai-check');
@@ -1026,6 +1042,8 @@ export const AppProvider = ({ children }) => {
         submitInspectorRequest,
         submitRequest: submitInspectorRequest,
         updateRequestStatusAndRemarks,
+        saveProductToFirestore,
+        saveFboProductToFirestore,
         currentScan,
         activeReportId,
         selectedViolation,

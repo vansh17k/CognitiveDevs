@@ -52,11 +52,11 @@ export const detectMarketplace = (url) => {
 };
 
 export const Scan = ({ defaultTab = 'physical' }) => {
-  const { startNewScan, navigate, addToast } = useApp();
+  const { startNewScan, navigate, addToast, currentUser } = useApp();
   const [showEcomPanel, setShowEcomPanel] = useState(defaultTab === 'ecommerce');
   const ecomSectionRef = useRef(null);
   
-  // Physical scan states
+  const isConsumer = currentUser?.role === 'consumer';
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -217,6 +217,57 @@ export const Scan = ({ defaultTab = 'physical' }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
+      {/* Role-Aware Scanning Header Banner */}
+      {isConsumer ? (
+        <div className="bg-gradient-to-r from-sky-50 via-teal-50/70 to-emerald-50 border border-sky-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 bg-sky-600 text-white rounded-xl shadow-xs shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-extrabold uppercase tracking-wide bg-sky-600 text-white px-2 py-0.5 rounded">
+                  Citizen Public Verification
+                </span>
+                <span className="text-xs font-bold text-sky-950">
+                  Zero Data Retention Guaranteed
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 mt-1 leading-relaxed max-w-2xl">
+                Aapka upload ya scan kiya hua product data server me <strong>store nahi hota</strong>. Instant Legal Metrology verification ke baad aap turant official PDF report download kar sakte hain.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono bg-sky-100 text-sky-800 border border-sky-200 font-bold px-3 py-1.5 rounded-lg shrink-0">
+            Ephemeral Mode: Active
+          </span>
+        </div>
+      ) : (
+        <div className="bg-gradient-to-r from-emerald-50 via-teal-50/60 to-slate-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 bg-[#0d4734] text-white rounded-xl shadow-xs shrink-0">
+              <Layers className="w-5 h-5 text-emerald-300" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-extrabold uppercase tracking-wide bg-[#0d4734] text-white px-2 py-0.5 rounded">
+                  Enforcement Wing
+                </span>
+                <span className="text-xs font-bold text-emerald-950">
+                  Statutory PCR-2011 Enforcement Inspection
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 mt-1 leading-relaxed max-w-2xl">
+                Full metrological audit with Rule 6 mandatory declarations, font height tables under Rule 9, and e-commerce digital marketplace verification. Logged with evidence chain in the central database.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono bg-emerald-100 text-[#0d4734] border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shrink-0">
+            Inspector Mode: Active
+          </span>
+        </div>
+      )}
+
       {/* Upload, Capture & E-Commerce Grid Card */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
@@ -459,27 +510,51 @@ export const Scan = ({ defaultTab = 'physical' }) => {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {INITIAL_PRODUCTS.slice(0, 3).map((pkg) => (
-              <div 
-                key={pkg.id}
-                onClick={() => handleSelectSample(pkg)}
-                className="group p-2.5 rounded-xl border border-slate-200 hover:border-[#0d4734] bg-slate-50/60 hover:bg-emerald-50/30 cursor-pointer transition-all flex items-center gap-3"
-              >
-                <img 
-                  src={pkg.imageUrl} 
-                  alt={pkg.name} 
-                  className="w-12 h-12 object-cover rounded-lg border border-slate-200 shrink-0" 
-                />
-                <div className="min-w-0 flex-1">
-                  <h4 className="text-xs font-bold text-slate-900 truncate group-hover:text-[#0d4734]">{pkg.name}</h4>
-                  <p className="text-[10px] text-slate-500 truncate">{pkg.category}</p>
-                  <span className="inline-block mt-0.5 text-[9px] font-semibold text-[#0d4734]">
-                    Scan Sample →
-                  </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {INITIAL_PRODUCTS.slice(0, 6).map((pkg) => {
+              const isCompliant = (pkg.score || pkg.complianceScore || 0) >= 90 && (!pkg.violations || pkg.violations.length === 0);
+              const score = pkg.score || pkg.complianceScore || 85;
+
+              return (
+                <div 
+                  key={pkg.id}
+                  onClick={() => handleSelectSample(pkg)}
+                  className="group p-3 rounded-2xl border border-slate-200/90 hover:border-[#0d4734] bg-slate-50/60 hover:bg-emerald-50/30 cursor-pointer transition-all flex items-center gap-3 shadow-2xs hover:shadow-xs"
+                >
+                  <img 
+                    src={pkg.imageUrl} 
+                    alt={pkg.name} 
+                    className="w-13 h-13 object-cover rounded-xl border border-slate-200 shrink-0 bg-white" 
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-1">
+                      <h4 className="text-xs font-bold text-slate-900 truncate group-hover:text-[#0d4734]">{pkg.name}</h4>
+                      <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                        isCompliant 
+                          ? 'bg-emerald-100 text-emerald-800' 
+                          : score >= 65 
+                          ? 'bg-amber-100 text-amber-800' 
+                          : 'bg-rose-100 text-rose-800'
+                      }`}>
+                        {score}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-[10px] text-slate-500 truncate">{pkg.category}</span>
+                      <span className="text-[10px] text-slate-300">•</span>
+                      <span className={`text-[9px] font-semibold truncate ${
+                        isCompliant ? 'text-emerald-700' : 'text-amber-700'
+                      }`}>
+                        {isCompliant ? 'Compliant' : pkg.status || 'Requires Review'}
+                      </span>
+                    </div>
+                    <span className="inline-block mt-1 text-[10px] font-bold text-[#0d4734] group-hover:translate-x-0.5 transition-transform">
+                      Instant Verify →
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
