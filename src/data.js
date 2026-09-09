@@ -52,6 +52,32 @@ export const INITIAL_USERS = [
     status: 'inactive',
     lastActive: '2 days ago',
     scansCount: 184,
+  },
+  {
+    id: 'usr-consumer',
+    name: 'Citizen Consumer (Quick Check)',
+    email: 'consumer@citizen.in',
+    role: 'consumer',
+    department: 'Consumer Grievance & Public Awareness',
+    designation: 'Citizen / Consumer User',
+    division: 'National Consumer Verification',
+    mobile: '+91 98000 00000',
+    status: 'active',
+    lastActive: 'Active now (Guest Session)',
+    scansCount: 0,
+  },
+  {
+    id: 'usr-fbo',
+    name: 'Apex Nutrition & Agro Foods Pvt. Ltd.',
+    email: 'fbo@lmcc.demo',
+    role: 'fbo',
+    department: 'Packaged Commodities Manufacturing & Self-Compliance',
+    designation: 'Registered Manufacturer / Brand Owner',
+    division: 'Food Business Operator (FSSAI Reg: 10020021000123)',
+    mobile: '+91 98765 43210',
+    status: 'active',
+    lastActive: 'Active now (FBO Self-Service)',
+    scansCount: 48,
   }
 ];
 
@@ -761,6 +787,45 @@ export const INITIAL_PRODUCTS = [
     boundingBoxes: [
       { id: 'bb-1', label: 'Manufacturer Info', x: 15, y: 25, width: 70, height: 18, status: 'compliant', textDetected: 'Hindustan Coca-Cola' },
       { id: 'bb-2', label: 'Net Qty: 750 ml', x: 20, y: 50, width: 60, height: 14, status: 'compliant', textDetected: '750 ml' }
+    ]
+  },
+  {
+    id: 'prod-008',
+    name: 'Cadbury Dairy Milk Silk Roast Almond Chocolate Bar',
+    brand: 'Cadbury (Mondelez India)',
+    category: 'Chocolates & Confectionery',
+    netQuantity: '143 g',
+    mrp: '₹185.00 (incl. of all taxes)',
+    manufacturerName: 'Mondelez India Foods Pvt. Ltd.',
+    manufacturerAddress: 'Unit No. 2001, 20th Floor, Tower-3 (Wing C), Indiabulls Finance Centre, Parel, Mumbai 400013',
+    packingDate: '10/05/2026',
+    expiryDate: '10/05/2027',
+    countryOfOrigin: 'India',
+    consumerCare: '1800 22 7080 | suggestions@mdlz.com',
+    fssaiLicense: '10014022002711',
+    batchNumber: 'LOT-CAD-9921',
+    imageUrl: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=800&q=80',
+    scanDate: '10/05/2026 12:45 PM',
+    status: 'Compliant',
+    score: 98,
+    inspectorName: 'Inspector A',
+    inspectorId: 'usr-001',
+    reportId: 'LEXISCAN-2026-00131',
+    declarations: [
+      { id: 'd-1', srNo: 1, name: 'Name & Address of Manufacturer', extractedValue: 'Mondelez India Foods Pvt Ltd, Parel, Mumbai', status: 'Compliant', confidence: 99, detected: true, remarks: 'Verified corporate & factory address', ruleCode: 'Rule 6(1)(a)' },
+      { id: 'd-2', srNo: 2, name: 'Net Quantity', extractedValue: '143 g', status: 'Compliant', confidence: 98, detected: true, remarks: 'Standard SI metric weight', ruleCode: 'Rule 6(1)(b)' },
+      { id: 'd-3', srNo: 3, name: 'MRP & Unit Sale Price', extractedValue: '₹185.00 (incl. of all taxes) | USP: ₹1.29 / 1 g', status: 'Compliant', confidence: 98, detected: true, remarks: 'Complies with Rule 6(1)(d) & Rule 6(11)', ruleCode: 'Rule 6(1)(d)' },
+      { id: 'd-4', srNo: 4, name: 'Month & Year of Packing', extractedValue: '10/05/2026', status: 'Compliant', confidence: 96, detected: true, remarks: 'Legible batch & packing date', ruleCode: 'Rule 6(1)(c)' },
+      { id: 'd-5', srNo: 5, name: 'Consumer Care Helpline', extractedValue: '1800 22 7080 | suggestions@mdlz.com', status: 'Compliant', confidence: 97, detected: true, remarks: 'Toll-free and email verified', ruleCode: 'Rule 6(1)(e)' },
+      { id: 'd-6', srNo: 6, name: 'Country of Origin', extractedValue: 'Country of Origin: India', status: 'Compliant', confidence: 99, detected: true, remarks: 'Country of Origin clearly declared', ruleCode: 'Rule 6(1)(f)' },
+      { id: 'd-7', srNo: 7, name: 'FSSAI License No.', extractedValue: '10014022002711', status: 'Compliant', confidence: 98, detected: true, remarks: 'Valid central FSSAI license', ruleCode: 'Rule 6(1)(a)' }
+    ],
+    violations: [],
+    boundingBoxes: [
+      { id: 'bb-1', label: 'Cadbury Brand Info', x: 10, y: 15, width: 80, height: 18, status: 'compliant', textDetected: 'Cadbury Dairy Milk Silk Roast Almond' },
+      { id: 'bb-2', label: 'Net Qty: 143g', x: 10, y: 40, width: 35, height: 12, status: 'compliant', textDetected: 'Net Wt. 143 g' },
+      { id: 'bb-3', label: 'MRP ₹185.00', x: 55, y: 40, width: 38, height: 12, status: 'compliant', textDetected: 'MRP Rs. 185.00 (USP Rs 1.29/g)' },
+      { id: 'bb-4', label: 'FSSAI & Origin', x: 10, y: 65, width: 60, height: 12, status: 'compliant', textDetected: 'Origin: India | FSSAI 10014022002711' }
     ]
   }
 ];

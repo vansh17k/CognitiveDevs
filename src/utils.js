@@ -76,18 +76,32 @@ export function calculateComplianceScore(declarations, violations) {
   return { score, status };
 }
 
-export function generateAnalysisForUpload(imageDataUrl, productNameInput, presetId) {
+export function generateAnalysisForUpload(imageDataUrl, productNameInput, presetId, ecommerceMeta) {
   const s = (productNameInput || '').trim().toLowerCase();
   
   // Smart match preset against name or file name tokens
+  const isCadburyOrChocolate = 
+    s.includes('cadbury') || 
+    s.includes('chocolate') || 
+    s.includes('silk') || 
+    s.includes('bournville') || 
+    s.includes('5-star') || 
+    s.includes('perk') || 
+    (s.includes('roast') && s.includes('almond'));
+  const isAmulMilk = (s.includes('amul') || (s.includes('milk') && !isCadburyOrChocolate) || s.includes('taaza'));
+
   const matchedPreset = (s ? INITIAL_PRODUCTS.find(p => {
     const pName = (p.name || '').toLowerCase();
     const pBrand = (p.brand || '').toLowerCase();
+    if (isCadburyOrChocolate && (pBrand.includes('cadbury') || pName.includes('cadbury') || pName.includes('chocolate'))) {
+      return true;
+    }
+    if (isAmulMilk && pBrand.includes('amul')) {
+      return true;
+    }
     return pName.includes(s) || s.includes(pName) || (pBrand && s.includes(pBrand)) || 
       (s.includes('maggi') && pName.includes('maggi')) ||
       (s.includes('noodle') && pName.includes('maggi')) ||
-      (s.includes('amul') && pName.includes('amul')) ||
-      (s.includes('milk') && pName.includes('amul')) ||
       (s.includes('parle') && pName.includes('parle')) ||
       (s.includes('biscuit') && pName.includes('parle')) ||
       (s.includes('lay') && pName.includes('lay')) ||
@@ -107,6 +121,109 @@ export function generateAnalysisForUpload(imageDataUrl, productNameInput, preset
     minute: '2-digit',
     hour12: true
   });
+
+  // Handle E-Commerce specific analysis
+  if (ecommerceMeta) {
+    const ecomDeclarations = [
+      { id: 'd1', srNo: 1, name: 'Name & Address of Manufacturer/Packer', extractedValue: ecommerceMeta.declarations?.mfgName || 'Registered Manufacturer on PDP', status: 'Compliant', confidence: 97, detected: true, remarks: 'Verified on e-commerce listing and package label', ruleCode: 'Rule 6(1)(a)' },
+      { id: 'd2', srNo: 2, name: 'Net Quantity', extractedValue: ecommerceMeta.netQuantity || '1 Standard Unit', status: 'Compliant', confidence: 98, detected: true, remarks: 'Matches between product title and physical package', ruleCode: 'Rule 6(1)(b)' },
+      { id: 'd3', srNo: 3, name: 'Printed MRP & Unit Sale Price (USP)', extractedValue: `Printed MRP: ₹${ecommerceMeta.printedMrp} | USP: ${ecommerceMeta.unitSalePrice || '₹0.15 / unit'}`, status: ecommerceMeta.unitSalePrice && !ecommerceMeta.unitSalePrice.includes('Missing') ? 'Compliant' : 'Non-Compliant', confidence: 96, detected: true, remarks: ecommerceMeta.unitSalePrice?.includes('Missing') ? 'Unit Sale Price missing on digital PDP (Rule 6(11) violation)' : 'Unit sale price displayed alongside MRP', ruleCode: 'Rule 6(1)(d) & Rule 6(11)' },
+      { id: 'd4', srNo: 4, name: 'Month & Year of Packing / Import', extractedValue: ecommerceMeta.declarations?.mfgDate || '04/2026', status: 'Compliant', confidence: 94, detected: true, remarks: 'Statutory batch & packing date verified', ruleCode: 'Rule 6(1)(c)' },
+      { id: 'd5', srNo: 5, name: 'Consumer Care Helpline & Email', extractedValue: ecommerceMeta.declarations?.consumerCare || '1800 Helpline & verified email', status: 'Compliant', confidence: 95, detected: true, remarks: 'Consumer helpline verified', ruleCode: 'Rule 6(1)(e)' },
+      { id: 'd6', srNo: 6, name: 'Country of Origin', extractedValue: ecommerceMeta.declarations?.countryOfOrigin || 'India', status: 'Compliant', confidence: 96, detected: true, remarks: 'Country of origin explicitly declared', ruleCode: 'Rule 6(1)(f)' },
+      { id: 'd7', srNo: 7, name: 'FSSAI Food License Number', extractedValue: ecommerceMeta.declarations?.fssai || '10012011000168', status: 'Compliant', confidence: 95, detected: true, remarks: '14-Digit valid food licensing code', ruleCode: 'Rule 6(1)(a)' },
+      { id: 'd8', srNo: 8, name: 'Rule 6(10) E-Commerce Digital Declarations', extractedValue: ecommerceMeta.rule610Status, status: ecommerceMeta.isRule610Compliant ? 'Compliant' : 'Non-Compliant', confidence: 98, detected: true, remarks: ecommerceMeta.isRule610Compliant ? 'E-commerce marketplace displays all physical package declarations on page' : (ecommerceMeta.rule610Violation || 'Mandatory digital declarations or back label image missing on listing'), ruleCode: 'Rule 6(10)' }
+    ];
+
+    const ecomViolations = ecommerceMeta.isRule610Compliant ? [] : [
+      {
+        id: 'viol-ecom-1',
+        title: 'Rule 6(10) Digital Package Declaration Non-Compliance',
+        description: ecommerceMeta.rule610Violation || 'Mandatory packaging back panel declaration image missing or unreadable on e-commerce product display page.',
+        severity: 'High',
+        ruleViolated: 'Rule 6(10) & Rule 6(11)',
+        penalty: 'Notice under Section 36 of Legal Metrology Act, 2009 (₹25,000 for first offence)',
+        actionRequired: 'E-commerce marketplace & seller must upload high-resolution statutory label images and display Unit Sale Price.'
+      }
+    ];
+
+    const ecomStatus = ecommerceMeta.isRule610Compliant ? 'Compliant' : 'Non-Compliant';
+    const ecomScore = ecommerceMeta.isRule610Compliant ? 96 : 64;
+
+    const newProd = {
+      id: newProdId,
+      name: ecommerceMeta.title,
+      brand: ecommerceMeta.brand,
+      category: ecommerceMeta.category,
+      netQuantity: ecommerceMeta.netQuantity,
+      netQuantityDeclared: true,
+      netQuantityValue: ecommerceMeta.netQuantity,
+      mrp: `₹${ecommerceMeta.printedMrp}.00 (incl. of all taxes)`,
+      mrpDeclared: true,
+      mrpValue: ecommerceMeta.printedMrp,
+      manufacturerName: ecommerceMeta.declarations?.mfgName?.split(',')[0] || 'Adani Wilmar Limited',
+      manufacturerAddress: ecommerceMeta.declarations?.mfgName || 'Registered Address',
+      manufacturerDeclared: true,
+      packingDate: ecommerceMeta.declarations?.mfgDate || '04/2026',
+      mfgDate: ecommerceMeta.declarations?.mfgDate || '04/2026',
+      countryOfOrigin: ecommerceMeta.declarations?.countryOfOrigin || 'India',
+      countryOfOriginDeclared: true,
+      consumerCare: ecommerceMeta.declarations?.consumerCare || '1800-233-9999',
+      consumerCareContact: ecommerceMeta.declarations?.consumerCare || '1800-233-9999',
+      consumerCareDetails: true,
+      fssaiLicense: ecommerceMeta.declarations?.fssai || '10013021000817',
+      fssaiNumber: ecommerceMeta.declarations?.fssai || '10013021000817',
+      fssaiLicenseDeclared: true,
+      batchNumber: `ECOM-LOT-${Math.floor(1000 + Math.random() * 9000)}`,
+      imageUrl: imageDataUrl || ecommerceMeta.imageUrl,
+      scanDate: timestamp,
+      status: ecomStatus,
+      score: ecomScore,
+      complianceScore: ecomScore,
+      inspectorName: 'Inspector A',
+      inspectorId: 'usr-001',
+      reportId: newReportId,
+      declarations: ecomDeclarations,
+      violations: ecomViolations,
+      boundingBoxes: [
+        { id: 'b1', label: 'E-Com Rule 6(10)', x: 10, y: 15, width: 80, height: 20, status: ecommerceMeta.isRule610Compliant ? 'compliant' : 'non-compliant', textDetected: ecommerceMeta.title },
+        { id: 'b2', label: 'MRP / USP', x: 60, y: 40, width: 35, height: 15, status: ecommerceMeta.isRule610Compliant ? 'compliant' : 'non-compliant', textDetected: `MRP ₹${ecommerceMeta.printedMrp}` },
+        { id: 'b3', label: 'Origin: India', x: 10, y: 70, width: 40, height: 15, status: 'compliant', textDetected: ecommerceMeta.declarations?.countryOfOrigin || 'India' }
+      ],
+      inspectorRemarks: `Scanned via E-Commerce Link (${ecommerceMeta.platform}). Digital Rule 6(10) audit conducted.`,
+      ecommerceMeta: ecommerceMeta,
+      isEcommerceScan: true
+    };
+
+    const newInsp = {
+      id: `insp-${newProdId}`,
+      reportId: newReportId,
+      productId: newProdId,
+      productName: newProd.name,
+      brand: newProd.brand,
+      category: newProd.category,
+      imageUrl: newProd.imageUrl,
+      inspectorId: 'usr-001',
+      inspectorName: 'Inspector A',
+      date: timestamp.split(' ')[0],
+      timestamp: timestamp,
+      status: newProd.status,
+      score: newProd.score,
+      complianceScore: newProd.score,
+      declarationsCount: ecomDeclarations.length,
+      compliantCount: ecomDeclarations.filter(d => d.status === 'Compliant').length,
+      violationsCount: ecomViolations.length,
+      manualReviewCount: ecomDeclarations.filter(d => d.status === 'Needs Review').length,
+      violations: ecomViolations,
+      declarations: ecomDeclarations,
+      boundingBoxes: newProd.boundingBoxes,
+      inspectorRemarks: newProd.inspectorRemarks,
+      ecommerceMeta: ecommerceMeta,
+      isEcommerceScan: true
+    };
+
+    return { product: newProd, inspection: newInsp };
+  }
 
   if (matchedPreset) {
     const newProd = {

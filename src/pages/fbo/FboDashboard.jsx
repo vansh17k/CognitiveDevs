@@ -221,7 +221,7 @@ export const FboDashboard = () => {
       productName: presetObj?.productName || title,
       category: presetObj?.category || 'Food & Beverage',
       presetId: presetObj?.id || 'custom'
-    }).catch(err => console.warn('Background AI scan note:', err));
+    }).catch(() => {});
 
     // Clear prior timers
     pipelineTimers.current.forEach(t => clearTimeout(t));

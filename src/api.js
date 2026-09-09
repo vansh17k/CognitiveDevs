@@ -17,7 +17,6 @@ export const apiService = {
       const res = await fetch('/api/health');
       return await res.json();
     } catch (err) {
-      console.warn('Backend health check error:', err);
       return { status: 'offline', error: err.message };
     }
   },
@@ -40,7 +39,7 @@ export const apiService = {
       }
       return await res.json();
     } catch (err) {
-      console.warn('Backend scan analysis error, using client fallback:', err);
+      console.log('[apiService] Scan analysis using client fallback engine');
       return null;
     }
   },
@@ -63,7 +62,7 @@ export const apiService = {
       }
       return await res.json();
     } catch (err) {
-      console.warn('Backend explain violation error:', err);
+      console.log('[apiService] Legal explainability using rule fallback');
       return null;
     }
   },

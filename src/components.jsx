@@ -40,6 +40,8 @@ import {
   Camera,
   LayoutDashboard,
   ScanLine,
+  Globe,
+  Link2,
   History,
   Package,
   Users,
@@ -180,8 +182,8 @@ export const ExplainViolationModal = () => {
             setAiLegalText(data.explanation);
           }
         })
-        .catch(err => {
-          console.warn('Backend AI explanation call error:', err);
+        .catch(() => {
+          // Handled gracefully with statutory notice fallback
         })
         .finally(() => {
           if (isMounted) setLoadingAi(false);
@@ -1119,24 +1121,52 @@ export const TopNavGlider = ({ activeSection, onSelect }) => {
 export const Sidebar = ({ onCloseMobile }) => {
   const { currentPage, navigate, currentUser, requestStats } = useApp();
   const isDGM = currentUser?.role === 'dgm';
+  const isInspector = currentUser?.role === 'inspector';
+  const isConsumer = currentUser?.role === 'consumer';
 
-  const navItems = [
-    { label: 'Home', page: 'landing', icon: Home },
-    { label: 'Dashboard', page: 'dashboard', icon: LayoutDashboard },
-    { 
-      label: isDGM ? 'Inspector Requests (DGM)' : 'My Action Requests', 
-      page: 'requests', 
-      icon: FileText,
-      badge: isDGM && requestStats?.pending > 0 ? `${requestStats.pending} new` : null
-    },
-    { label: 'Scan Product', page: 'scan', icon: ScanLine },
-    { label: 'All Reports', page: 'history', icon: FileSpreadsheet },
-    { label: 'Violations', page: 'violations', icon: AlertTriangle },
-    { label: 'Products', page: 'products', icon: Package },
-    { label: 'Users Directory', page: 'users', icon: Users },
-    { label: 'Settings', page: 'settings', icon: Settings },
-    { label: 'Help', page: 'help', icon: HelpIcon },
-  ];
+  let navItems = [];
+  if (isConsumer) {
+    navItems = [
+      { label: 'Instant Scan & Verify', page: 'scan', icon: ScanLine },
+      { label: 'Active Check Result', page: 'result', icon: FileText },
+      { label: 'PCR 2011 Rules Guide', page: 'rules', icon: BookOpen },
+      { label: 'Consumer Rights & Help', page: 'help', icon: HelpIcon },
+    ];
+  } else if (isInspector) {
+    navItems = [
+      { label: 'My Inspection Desk', page: 'dashboard', icon: LayoutDashboard },
+      { 
+        label: 'My Action Requests', 
+        page: 'requests', 
+        icon: FileText 
+      },
+      { label: 'Scan Product', page: 'scan', icon: ScanLine },
+      { label: 'My Scanned Products', page: 'products', icon: Package },
+      { label: 'My Inspection Reports', page: 'history', icon: FileSpreadsheet },
+      { label: 'PCR 2011 Rules', page: 'rules', icon: BookOpen },
+      { label: 'Settings', page: 'settings', icon: Settings },
+      { label: 'Help & SOP', page: 'help', icon: HelpIcon },
+    ];
+  } else {
+    // DGM: Poora Access
+    navItems = [
+      { label: 'DGM Command Center', page: 'dashboard', icon: LayoutDashboard },
+      { 
+        label: 'Inspector Requests', 
+        page: 'requests', 
+        icon: FileText,
+        badge: requestStats?.pending > 0 ? `${requestStats.pending} new` : null
+      },
+      { label: 'Scan Product', page: 'scan', icon: ScanLine },
+      { label: 'All Statewide Reports', page: 'history', icon: FileSpreadsheet },
+      { label: 'Violations Registry', page: 'violations', icon: AlertTriangle },
+      { label: 'All Products Repository', page: 'products', icon: Package },
+      { label: 'Enforcement Officers', page: 'users', icon: Users },
+      { label: 'PCR 2011 Rules', page: 'rules', icon: BookOpen },
+      { label: 'Settings', page: 'settings', icon: Settings },
+      { label: 'Help', page: 'help', icon: HelpIcon },
+    ];
+  }
 
   const handleNavClick = (page) => {
     navigate(page);
@@ -1144,7 +1174,7 @@ export const Sidebar = ({ onCloseMobile }) => {
   };
 
   return (
-    <aside className="w-56 bg-[#0d4734] text-white flex flex-col h-screen select-none border-r border-[#093526] shrink-0">
+    <aside className="w-60 bg-[#0d4734] text-white flex flex-col h-screen select-none border-r border-[#093526] shrink-0">
       {/* Brand Header */}
       <div className="h-14 px-4 flex items-center justify-between border-b border-[#145741]">
         <div 
@@ -1153,7 +1183,12 @@ export const Sidebar = ({ onCloseMobile }) => {
           title="Go to Home Page"
         >
           <Menu className="w-4 h-4 text-emerald-200" />
-          <span className="font-bold text-base tracking-wide text-white">LexiScan</span>
+          <div className="flex flex-col">
+            <span className="font-bold text-base tracking-wide text-white leading-none">LexiScan</span>
+            <span className="text-[10px] text-emerald-300 font-medium">
+              {isDGM ? 'DGM Full Access' : isInspector ? 'Inspector Desk' : 'Citizen Verification'}
+            </span>
+          </div>
         </div>
         {onCloseMobile && (
           <button 
@@ -1167,12 +1202,11 @@ export const Sidebar = ({ onCloseMobile }) => {
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+      <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-1">
         {navItems.map((item) => {
           const isActive = currentPage === item.page || 
-            (item.page === 'scan' && (currentPage === 'analysis' || currentPage === 'result')) ||
-            (item.page === 'history' && currentPage === 'products') ||
-            (item.page === 'reports' && currentPage === 'report') ||
+            (item.page === 'scan' && (currentPage === 'analysis')) ||
+            (item.page === 'history' && currentPage === 'reports') ||
             (item.page === 'violations' && currentPage === 'analytics');
           const Icon = item.icon;
 
@@ -1200,15 +1234,25 @@ export const Sidebar = ({ onCloseMobile }) => {
         })}
       </div>
 
-      {/* Officer Info in footer */}
-      <div className="p-3 border-t border-[#145741] bg-[#093526]/80 flex items-center gap-2.5">
-        <div className="w-7 h-7 rounded-full bg-[#18644c] border border-emerald-400/30 flex items-center justify-center text-xs font-bold text-white shrink-0">
+      {/* Officer/Consumer Info in footer */}
+      <div className="p-3 border-t border-[#145741] bg-[#093526]/90 flex items-center gap-2.5">
+        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold text-white shrink-0 ${
+          isConsumer 
+            ? 'bg-sky-700 border-sky-400/40' 
+            : isDGM 
+              ? 'bg-amber-700 border-amber-400/40' 
+              : 'bg-[#18644c] border-emerald-400/30'
+        }`}>
           {currentUser?.name?.charAt(0) || 'U'}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-white truncate leading-tight">{currentUser?.name || 'Officer'}</p>
+          <p className="text-xs font-medium text-white truncate leading-tight">{currentUser?.name || 'User'}</p>
           <p className="text-[10px] text-emerald-300 truncate">
-            {isDGM ? 'Deputy General Manager (DGM)' : (currentUser?.division || 'Legal Metrology')}
+            {isConsumer 
+              ? 'Zero Data Stored • Instant Check' 
+              : isDGM 
+                ? 'Deputy General Manager (Full Access)' 
+                : (currentUser?.division || 'Inspector Checked Data')}
           </p>
         </div>
       </div>
@@ -1270,6 +1314,7 @@ export const Navbar = ({ onToggleSidebar }) => {
       case 'dashboard': return isDGM ? 'DGM Central Command Dashboard' : 'Inspector Dashboard';
       case 'requests': return isDGM ? 'Central Inspector Requests Portal (DGM)' : 'Field Complaints & Action Requests';
       case 'scan': return 'Scan Product';
+      case 'ecommerce-scan': return 'E-Commerce Link Scanner (Rule 6(10))';
       case 'analysis': return 'Analysis in Progress';
       case 'result': return 'Analysis Result';
       case 'reports': 
@@ -1291,6 +1336,7 @@ export const Navbar = ({ onToggleSidebar }) => {
       case 'dashboard': return isDGM ? 'Statewide supervision and central request approval station' : 'Monitor inspections, violations, and filed request statuses';
       case 'requests': return isDGM ? 'Central Authority: Review incoming complaints, issue compounding orders & seizure notices' : 'Submit field infractions and track Deputy General Manager (DGM) decisions';
       case 'scan': return 'Upload product image or capture using camera';
+      case 'ecommerce-scan': return 'Audit digital e-commerce marketplace listings against Rule 6(10) requirements';
       case 'analysis': return 'Extracting packaging text and verifying rules...';
       case 'result': return 'Compliance analysis of uploaded product';
       case 'reports':
@@ -1442,107 +1488,6 @@ export const Navbar = ({ onToggleSidebar }) => {
               </div>
             )}
           </div>
-
-          {/* Role Indicator / Dropdown Pill */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setIsProfileOpen(!isProfileOpen);
-                setIsNotificationsOpen(false);
-              }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer ${
-                isDGM 
-                  ? 'bg-emerald-950 text-emerald-100 border-emerald-800 hover:bg-emerald-900' 
-                  : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              <ShieldCheck className={`w-3.5 h-3.5 ${isDGM ? 'text-emerald-300' : 'text-emerald-700'}`} />
-              <span>{isDGM ? 'Deputy General Manager (DGM)' : 'Field Inspector'}</span>
-              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
-            </button>
-
-            {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50 text-xs">
-                <div className="px-4 py-2 border-b border-slate-100">
-                  <p className="font-bold text-slate-900">{currentUser?.name || 'Officer'}</p>
-                  <p className="text-[11px] text-slate-500 truncate">{currentUser?.email || 'officer@lmcc.gov.in'}</p>
-                  <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded ${
-                    isDGM ? 'bg-emerald-100 text-emerald-900' : 'bg-slate-100 text-slate-800'
-                  }`}>
-                    {isDGM ? 'Central Authority: Deputy General Manager (DGM)' : 'Enforcement Field Inspector'}
-                  </span>
-                </div>
-
-                <div className="py-1">
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      navigate('requests');
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium"
-                  >
-                    <FileText className="w-4 h-4 text-slate-400" />
-                    <span>{isDGM ? 'Inspector Requests Desk' : 'My Filed Requests'}</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      navigate('settings');
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700"
-                  >
-                    <Settings className="w-4 h-4 text-slate-400" />
-                    <span>Profile & Settings</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      switchUserRole(isDGM ? 'inspector' : 'dgm');
-                      setIsProfileOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-emerald-50 text-emerald-900 flex items-center gap-2 font-semibold"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                    <span>Switch to {isDGM ? 'Field Inspector' : 'Deputy General Manager (DGM)'}</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      logout();
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 border-t border-slate-100"
-                  >
-                    <LogOut className="w-4 h-4 text-red-500" />
-                    <span>Sign Out</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* New Label Scan Button */}
-          <button
-            onClick={() => {
-              navigate('fbo-dashboard');
-              window.dispatchEvent(new CustomEvent('focus-fbo-upload-artwork'));
-              setTimeout(() => {
-                const el = document.getElementById('fbo-upload-artwork-box');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  el.classList.add('ring-4', 'ring-[#065F46]/50', 'bg-emerald-50/70');
-                  setTimeout(() => el.classList.remove('ring-4', 'ring-[#065F46]/50', 'bg-emerald-50/70'), 2500);
-                }
-              }, 150);
-            }}
-            title="Upload Packaging Label Artwork"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0d4734] hover:bg-[#083325] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer border border-[#145741]"
-          >
-            <Camera className="w-3.5 h-3.5 text-emerald-200" />
-            <span className="hidden sm:inline">New Label Scan</span>
-            <span className="sm:hidden">Scan</span>
-          </button>
 
           {/* Top Right Home Button */}
           <button

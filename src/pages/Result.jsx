@@ -9,16 +9,48 @@ import {
   ScanLine, 
   Sparkles,
   CheckCircle2,
-  ShieldAlert
+  ShieldAlert,
+  Download,
+  ShieldCheck,
+  RotateCcw,
+  Info,
+  Globe,
+  ExternalLink
 } from 'lucide-react';
 import { INITIAL_PRODUCTS, INITIAL_INSPECTIONS } from '../data.js';
+import { exportReportToPDF, getProductReportItems } from '../utils/exportReport.js';
 
 export const Result = () => {
-  const { currentScan, navigate, openExplainModal } = useApp();
+  const { currentScan, setCurrentScan, navigate, openExplainModal, currentUser, addToast } = useApp();
   const [showOriginalModal, setShowOriginalModal] = useState(false);
 
+  const isConsumer = currentUser?.role === 'consumer';
   const product = currentScan?.product || INITIAL_PRODUCTS[0];
   const inspection = currentScan?.inspection || INITIAL_INSPECTIONS[0];
+
+  const handleDownloadPDF = () => {
+    const items = getProductReportItems(product);
+    const ok = exportReportToPDF(product, inspection, items, product.inspectorRemarks || '');
+    if (ok && addToast) {
+      addToast({
+        type: 'success',
+        title: 'PDF Report Downloaded',
+        description: `Official statutory report saved for ${product.name}.`
+      });
+    }
+  };
+
+  const handleConsumerExit = () => {
+    setCurrentScan(null);
+    navigate('scan');
+    if (addToast) {
+      addToast({
+        type: 'info',
+        title: 'Session Ended',
+        description: 'Instant verification completed. No scan data was stored in the database.'
+      });
+    }
+  };
 
   const extractedItems = [
     { 
@@ -68,6 +100,74 @@ export const Result = () => {
 
   return (
     <div className="space-y-6">
+      {/* E-Commerce Rule 6(10) Audit Context Banner */}
+      {product.isEcommerceScan && (
+        <div className="bg-gradient-to-r from-emerald-50 via-teal-50/70 to-slate-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 bg-[#0d4734] text-white rounded-xl shadow-xs shrink-0">
+              <Globe className="w-5 h-5 text-emerald-300" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-extrabold uppercase tracking-wide bg-[#0d4734] text-white px-2 py-0.5 rounded">
+                  {product.ecommerceMeta?.platform || 'E-Commerce'} Audit
+                </span>
+                <span className="text-xs font-bold text-emerald-950">
+                  Legal Metrology PCR 2011 — Rule 6(10) Digital Marketplace Verification
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 mt-1 leading-relaxed max-w-2xl">
+                Extracted listing from {product.ecommerceMeta?.platform || 'e-commerce marketplace'}. Verification checks physical package declaration alignment against digital product display pages (PDPs).
+              </p>
+            </div>
+          </div>
+
+          {product.ecommerceMeta?.url && (
+            <a 
+              href={product.ecommerceMeta.url} 
+              target="_blank" 
+              rel="noreferrer"
+              className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 shrink-0 shadow-2xs"
+            >
+              <span>View Source PDP</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Consumer Zero-Retention Alert & Instant Download Banner */}
+      {isConsumer && (
+        <div className="bg-gradient-to-r from-sky-50 via-cyan-50/70 to-emerald-50 border-2 border-sky-300 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 bg-sky-600 text-white rounded-xl shadow-xs shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-extrabold uppercase tracking-wide bg-sky-600 text-white px-2 py-0.5 rounded">
+                  Citizen Instant Check
+                </span>
+                <span className="text-xs font-bold text-sky-900">
+                  Privacy Policy: Zero Data Retention
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 mt-1 leading-relaxed max-w-2xl">
+                Aapka check kiya hua product data server me <strong>save nahi hoga</strong>. Instant verification ke baad aap abhi isi waqt official verification PDF download kar sakte hain. Page band hone ke baad ye data delete ho jayega.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleDownloadPDF}
+            className="w-full sm:w-auto px-5 py-2.5 bg-[#0d4734] hover:bg-[#083325] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
+          >
+            <Download className="w-4 h-4 text-emerald-200" />
+            <span>Download PDF Report Now</span>
+          </button>
+        </div>
+      )}
+
       {/* 3-Column Inspection Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
@@ -193,21 +293,79 @@ export const Result = () => {
 
             {/* Action Buttons */}
             <div className="space-y-2 pt-3 border-t border-slate-100">
-              <button
-                onClick={() => navigate('reports', { productId: product.id })}
-                className="w-full py-2.5 px-4 bg-[#0d4734] hover:bg-[#083325] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <FileText className="w-4 h-4" />
-                <span>View Full Report</span>
-              </button>
+              {isConsumer ? (
+                <>
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="w-full py-2.5 px-4 bg-[#0d4734] hover:bg-[#083325] text-white text-xs font-bold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Download className="w-4 h-4 text-emerald-200" />
+                    <span>Download PDF Report Now</span>
+                  </button>
 
-              <button
-                onClick={() => navigate('scan')}
-                className="w-full py-2.5 px-4 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <ScanLine className="w-4 h-4 text-slate-500" />
-                <span>Scan Another Product</span>
-              </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      onClick={handleConsumerExit}
+                      className="w-full py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <ScanLine className="w-4 h-4 text-slate-500" />
+                      <span>Scan Package</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setCurrentScan(null);
+                        navigate('ecommerce-scan');
+                      }}
+                      className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#0d4734] text-xs font-semibold rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Globe className="w-4 h-4 text-emerald-700" />
+                      <span>E-Com Link Scan</span>
+                    </button>
+                  </div>
+
+                  <div className="pt-1 text-[11px] text-slate-500 text-center flex items-center justify-center gap-1.5 font-medium">
+                    <Info className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                    <span>Closing this page discards transient scan data</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate('reports', { productId: product.id })}
+                    className="w-full py-2.5 px-4 bg-[#0d4734] hover:bg-[#083325] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>View Full Report</span>
+                  </button>
+
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#0d4734] text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Download className="w-4 h-4 text-emerald-700" />
+                    <span>Download PDF Report</span>
+                  </button>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      onClick={() => navigate('scan')}
+                      className="w-full py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <ScanLine className="w-4 h-4 text-slate-500" />
+                      <span>Scan Package</span>
+                    </button>
+
+                    <button
+                      onClick={() => navigate('ecommerce-scan')}
+                      className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#0d4734] text-xs font-semibold rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Globe className="w-4 h-4 text-emerald-700" />
+                      <span>E-Com Link Scan</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
           </div>

@@ -51,54 +51,8 @@ export const Header = ({ onToggleSidebar }) => {
         </div>
       </div>
 
-      {/* Right controls & Role Switcher */}
+      {/* Right controls */}
       <div className="flex items-center gap-2.5 sm:gap-3.5">
-        {/* Role toggle badge */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
-          <button
-            onClick={() => switchUserRole('inspector')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-              currentUser?.role === 'inspector' 
-                ? 'bg-white text-[#0d4734] shadow-xs' 
-                : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Inspector
-          </button>
-          <button
-            onClick={() => switchUserRole('admin')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-              currentUser?.role === 'admin' 
-                ? 'bg-white text-[#0d4734] shadow-xs' 
-                : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Admin
-          </button>
-        </div>
-
-        {/* Scan CTA */}
-        <button
-          onClick={() => {
-            navigate('fbo-dashboard');
-            window.dispatchEvent(new CustomEvent('focus-fbo-upload-artwork'));
-            setTimeout(() => {
-              const el = document.getElementById('fbo-upload-artwork-box');
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.classList.add('ring-4', 'ring-[#065F46]/50', 'bg-emerald-50/70');
-                setTimeout(() => el.classList.remove('ring-4', 'ring-[#065F46]/50', 'bg-emerald-50/70'), 2500);
-              }
-            }, 150);
-          }}
-          title="Upload Packaging Label Artwork"
-          className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#0d4734] hover:bg-[#083325] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors cursor-pointer"
-        >
-          <Camera className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">New Package Scan</span>
-          <span className="sm:hidden">Scan</span>
-        </button>
-
         {/* Top Right Home Button */}
         <button
           onClick={() => navigate('landing')}

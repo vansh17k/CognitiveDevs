@@ -42,8 +42,8 @@ export const Analysis = () => {
             updateCurrentScanWithAiResult(response.data);
           }
         }
-      }).catch(err => {
-        console.warn('API analysis background sync note:', err);
+      }).catch(() => {
+        // Fallback already maintained in pipeline
       });
     }
 

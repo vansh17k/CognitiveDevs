@@ -27,36 +27,25 @@ import {
   ScanLine,
   QrCode,
   Target,
-  Award
+  Award,
+  Building2,
+  UserCheck,
+  ShoppingBag,
+  Globe,
+  Link2
 } from 'lucide-react';
-import { Emblem, TopNavGlider, Sidebar } from '../components.jsx';
-import { AnimatePresence, motion } from 'motion/react';
+import { Emblem, TopNavGlider } from '../components.jsx';
+import { motion } from 'motion/react';
 
 export const Home = () => {
   const { 
     navigate, 
+    login,
     activeLandingSection, 
     activeLandingSectionSet, 
     scrollToLandingSection,
     addToast 
   } = useApp();
-
-  const [isSidebarDrawerOpen, setIsSidebarDrawerOpen] = useState(false);
-
-  // Freeze background scrolling whenever the sidebar drawer is open
-  useEffect(() => {
-    if (isSidebarDrawerOpen) {
-      const originalOverflow = document.body.style.overflow;
-      const originalTouchAction = document.body.style.touchAction;
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
-
-      return () => {
-        document.body.style.overflow = originalOverflow;
-        document.body.style.touchAction = originalTouchAction;
-      };
-    }
-  }, [isSidebarDrawerOpen]);
 
   // Contact form state
   const [formData, setFormData] = useState({
@@ -136,18 +125,8 @@ export const Home = () => {
       {/* Top Navigation Bar */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-          {/* Left: 3-line Menu Button + Logo & Emblem */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => setIsSidebarDrawerOpen(true)}
-              className="p-2 -ml-2 rounded-xl text-slate-700 hover:text-[#0d4734] hover:bg-emerald-50 active:bg-emerald-100 transition-all focus:outline-none focus:ring-2 focus:ring-[#0d4734]/30 cursor-pointer"
-              aria-label="Open Navigation Menu"
-              title="Open Navigation Menu"
-            >
-              <Menu className="w-5 h-5 text-slate-700" />
-            </button>
-
-            {/* Logo & Emblem */}
+          {/* Left: Logo & Emblem */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
             <div 
               className="flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none" 
               onClick={() => scrollToLandingSection('home')}
@@ -176,34 +155,6 @@ export const Home = () => {
           </div>
         </div>
       </header>
-
-      {/* Side Navigation Drawer (Green LexiScan App Menu) */}
-      <AnimatePresence>
-        {isSidebarDrawerOpen && (
-          <div className="fixed inset-0 z-50 flex overflow-hidden overscroll-none select-none">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsSidebarDrawerOpen(false)}
-              onWheel={(e) => e.preventDefault()}
-              onTouchMove={(e) => e.preventDefault()}
-              className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs cursor-pointer touch-none"
-            />
-            {/* Drawer */}
-            <motion.div
-              initial={{ x: -280 }}
-              animate={{ x: 0 }}
-              exit={{ x: -280 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative z-10 shadow-2xl h-full"
-            >
-              <Sidebar onCloseMobile={() => setIsSidebarDrawerOpen(false)} />
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* ================= SECTION 1: HOME / HERO ================= */}
       <section id="home" className="relative overflow-hidden pt-12 pb-14 sm:pt-16 sm:pb-20 bg-gradient-to-b from-[#ebf5ef] via-[#f2f8f4] to-[#f7faf8]">
@@ -241,11 +192,18 @@ export const Home = () => {
                 className="px-6 py-3 text-xs sm:text-sm font-semibold text-white bg-[#0d4734] hover:bg-[#083325] rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Scan className="w-4 h-4" />
-                <span>Get Started</span>
+                <span>Scan Product Label</span>
+              </button>
+              <button
+                onClick={() => navigate('ecommerce-scan')}
+                className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#0d4734] bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <Globe className="w-4 h-4 text-emerald-700" />
+                <span>E-Com Link Scan (Rule 6(10))</span>
               </button>
               <button
                 onClick={() => scrollToLandingSection('features')}
-                className="px-6 py-3 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
+                className="px-5 py-3 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
               >
                 <span>Explore Features</span>
                 <ArrowRight className="w-4 h-4 text-slate-400" />
@@ -271,6 +229,7 @@ export const Home = () => {
             </div>
 
           </div>
+
 
           {/* 4 Feature Preview Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
@@ -547,13 +506,20 @@ export const Home = () => {
                 </ul>
               </div>
 
-              <div className="pt-5 mt-4 border-t border-slate-200/80">
+              <div className="pt-5 mt-4 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <button
                   onClick={() => navigate('scan')}
-                  className="w-full py-2.5 text-xs font-semibold text-[#0d4734] bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+                  className="w-full py-2.5 px-3 text-xs font-semibold text-[#0d4734] bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
                 >
-                  <span>Launch OCR Scanner</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <Scan className="w-3.5 h-3.5" />
+                  <span>Physical Scan</span>
+                </button>
+                <button
+                  onClick={() => navigate('ecommerce-scan')}
+                  className="w-full py-2.5 px-3 text-xs font-semibold text-emerald-900 bg-emerald-100/70 hover:bg-emerald-200/80 border border-emerald-300/80 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+                >
+                  <Globe className="w-3.5 h-3.5 text-[#0d4734]" />
+                  <span>E-Com Link Scan</span>
                 </button>
               </div>
             </div>
@@ -793,13 +759,20 @@ export const Home = () => {
                 Upload a packaging photo or use standard preset sample packs to inspect declarations within 3 seconds.
               </p>
             </div>
-            <div className="flex items-center gap-3 relative z-10 shrink-0">
+            <div className="flex flex-wrap items-center gap-3 relative z-10 shrink-0">
               <button
                 onClick={() => navigate('scan')}
-                className="px-6 py-3 bg-white text-[#0d4734] hover:bg-emerald-50 font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                className="px-5 py-3 bg-white text-[#0d4734] hover:bg-emerald-50 font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Scan className="w-4 h-4" />
                 <span>Test Live Sample</span>
+              </button>
+              <button
+                onClick={() => navigate('ecommerce-scan')}
+                className="px-5 py-3 bg-emerald-900 text-emerald-100 hover:bg-emerald-950 font-bold text-xs sm:text-sm rounded-xl border border-emerald-700/60 shadow-md transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <Globe className="w-4 h-4 text-emerald-300" />
+                <span>Audit E-Com Link</span>
               </button>
             </div>
           </div>
@@ -1192,6 +1165,7 @@ export const Home = () => {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider mb-3">Enforcement Modules</h4>
             <ul className="space-y-2 text-[11px] text-slate-400">
               <li><button onClick={() => navigate('scan')} className="hover:text-white transition-colors cursor-pointer">AI Label Scanner</button></li>
+              <li><button onClick={() => navigate('ecommerce-scan')} className="hover:text-white transition-colors cursor-pointer text-emerald-400">E-Commerce Link Scanner (Rule 6(10))</button></li>
               <li><button onClick={() => navigate('dashboard')} className="hover:text-white transition-colors cursor-pointer">Inspection Dashboard</button></li>
               <li><button onClick={() => navigate('reports')} className="hover:text-white transition-colors cursor-pointer">Compliance Reports</button></li>
               <li><button onClick={() => navigate('rules')} className="hover:text-white transition-colors cursor-pointer">Rule 6 Compendium</button></li>

@@ -22,18 +22,27 @@ import {
   User,
   ShieldCheck,
   Send,
-  AlertTriangle
+  AlertTriangle,
+  Globe
 } from 'lucide-react';
 
 export const Dashboard = () => {
   const { 
     navigate, 
     currentUser, 
+    products = [],
+    inspections = [],
     inspectorRequests = [], 
     requestStats = {}
   } = useApp();
 
   const isDgm = currentUser?.role === 'dgm';
+
+  // Scoped metrics based on logged-in role
+  const totalInspections = products.length;
+  const nonCompliantCount = products.filter(p => p.status === 'Non-Compliant' || (p.violations && p.violations.length > 0)).length;
+  const compliantCount = products.filter(p => p.status === 'Compliant').length;
+  const complianceRate = totalInspections > 0 ? Math.round((compliantCount / totalInspections) * 100) : 75;
 
   // 7-day trend data
   const trendData = [
@@ -46,36 +55,40 @@ export const Dashboard = () => {
 
   // Overall compliance pie data
   const pieData = [
-    { name: 'Compliant', value: 876, color: '#10b981' },
-    { name: 'Non-Compliant', value: 372, color: '#ef4444' },
+    { name: 'Compliant', value: compliantCount || 876, color: '#10b981' },
+    { name: 'Non-Compliant', value: nonCompliantCount || 372, color: '#ef4444' },
   ];
 
-  // Recent inspection items
-  const recentInspections = [
-    {
-      id: 'insp-1',
-      name: 'Parle-G Biscuit',
-      date: '13 May 2025',
-      status: 'Compliant',
-      image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=150&auto=format&fit=crop&q=60',
-    },
-    {
-      id: 'insp-2',
-      name: 'Amul Taaza Milk',
-      date: '13 May 2025',
-      status: 'Non-Compliant',
-      image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=150&auto=format&fit=crop&q=60',
-    },
-    {
-      id: 'insp-3',
-      name: 'Lays Classic',
-      date: '12 May 2025',
-      status: 'Compliant',
-      image: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150&auto=format&fit=crop&q=60',
-    },
-  ];
+  // Dynamic recent inspections from scoped data
+  const recentInspections = (inspections && inspections.length > 0)
+    ? inspections.slice(0, 3).map(insp => ({
+        id: insp.id,
+        productId: insp.productId,
+        name: insp.productName || insp.brand || 'Inspected Commodity',
+        date: insp.date || insp.timestamp?.split(' ')[0] || '13 May 2025',
+        status: insp.status || 'Compliant',
+        image: insp.imageUrl || 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=150&auto=format&fit=crop&q=60',
+      }))
+    : [
+        {
+          id: 'insp-1',
+          productId: 'prod-1',
+          name: 'Parle-G Biscuit',
+          date: '13 May 2025',
+          status: 'Compliant',
+          image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=150&auto=format&fit=crop&q=60',
+        },
+        {
+          id: 'insp-2',
+          productId: 'prod-2',
+          name: 'Amul Taaza Milk',
+          date: '13 May 2025',
+          status: 'Non-Compliant',
+          image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=150&auto=format&fit=crop&q=60',
+        },
+      ];
 
-  // Top 3 requests for the dashboard spotlight
+  // Top requests for the dashboard spotlight
   const recentRequests = isDgm 
     ? inspectorRequests.slice(0, 3) 
     : inspectorRequests.filter(r => r.inspectorId === currentUser?.id || r.inspectorEmail === currentUser?.email).slice(0, 3);
@@ -121,10 +134,65 @@ export const Dashboard = () => {
             <Plus className="w-3.5 h-3.5" />
             <span>New Scan</span>
           </button>
+
+          <button
+            onClick={() => navigate('ecommerce-scan')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0d4734] bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl shadow-xs transition-colors cursor-pointer"
+            title="Audit e-commerce digital product link (Rule 6(10))"
+          >
+            <Globe className="w-3.5 h-3.5 text-emerald-700" />
+            <span>E-Com Link Scan</span>
+            <span className="text-[10px] bg-emerald-700 text-white px-1.5 py-0.2 rounded font-mono">6(10)</span>
+          </button>
         </div>
       </div>
 
+      {/* Role-Specific Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <span className="text-xs font-semibold">{isDgm ? 'Total Statewide Products' : 'My Inspected Products'}</span>
+            <FileText className="w-4 h-4 text-emerald-700" />
+          </div>
+          <div className="text-2xl font-black text-slate-900">{totalInspections}</div>
+          <p className="text-[10px] text-slate-400 mt-1">
+            {isDgm ? 'Central state repository access' : 'Only records inspected by you'}
+          </p>
+        </div>
 
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <span className="text-xs font-semibold">{isDgm ? 'Statewide Violations' : 'My Flagged Violations'}</span>
+            <AlertTriangle className="w-4 h-4 text-red-600" />
+          </div>
+          <div className="text-2xl font-black text-red-600">{nonCompliantCount}</div>
+          <p className="text-[10px] text-slate-400 mt-1">
+            {isDgm ? 'All zonal non-compliant items' : 'Violations detected on your desk'}
+          </p>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <span className="text-xs font-semibold">Compliance Pass Rate</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="text-2xl font-black text-emerald-600">{complianceRate}%</div>
+          <p className="text-[10px] text-slate-400 mt-1">Rule 6 mandatory declarations</p>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <span className="text-xs font-semibold">{isDgm ? 'Pending DGM Decisions' : 'My Requests to DGM'}</span>
+            <ShieldAlert className="w-4 h-4 text-amber-600" />
+          </div>
+          <div className="text-2xl font-black text-amber-600">
+            {isDgm ? (requestStats?.pending || 0) : inspectorRequests.length}
+          </div>
+          <p className="text-[10px] text-slate-400 mt-1">
+            {isDgm ? 'Seizure & compounding reviews' : 'Field escalation tracking'}
+          </p>
+        </div>
+      </div>
 
       {/* Middle Row: Trend, Overall Donut, Recent Inspections */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">

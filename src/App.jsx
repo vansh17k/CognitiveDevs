@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { 
   INITIAL_PRODUCTS, 
   INITIAL_INSPECTIONS, 
@@ -78,6 +78,7 @@ export const AppProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState('landing');
   const [pageHistory, setPageHistory] = useState([]);
   const [activeReportId, setActiveReportId] = useState(null);
+  const [loginInitialRole, setLoginInitialRole] = useState(null);
 
   // Persistence Loaders
   const [products, setProducts] = useState(() => {
@@ -122,6 +123,15 @@ export const AppProvider = ({ children }) => {
       return saved ? JSON.parse(saved) : INITIAL_USERS[0];
     } catch {
       return INITIAL_USERS[0];
+    }
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      const saved = localStorage.getItem('lmcc_is_logged_in_v1');
+      return saved === 'true';
+    } catch {
+      return false;
     }
   });
 
@@ -329,6 +339,14 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     try {
+      localStorage.setItem('lmcc_is_logged_in_v1', isLoggedIn ? 'true' : 'false');
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    try {
       localStorage.setItem(LOCAL_STORAGE_KEYS.REQUESTS, JSON.stringify(inspectorRequests));
     } catch (e) {
       console.warn('LocalStorage error:', e);
@@ -372,6 +390,9 @@ export const AppProvider = ({ children }) => {
   };
 
   const navigate = (page, params, isBackAction = false) => {
+    if (params?.role !== undefined) {
+      setLoginInitialRole(params.role);
+    }
     if (params?.reportId) {
       setActiveReportId(params.reportId);
     }
@@ -431,15 +452,65 @@ export const AppProvider = ({ children }) => {
   const login = (email, role) => {
     const userEmail = (email || '').trim().toLowerCase();
     const targetRole = role === 'admin' ? 'dgm' : role;
-    const targetUser = users.find(u => (u.email || '').toLowerCase() === userEmail) || 
-      (targetRole === 'dgm' ? INITIAL_USERS[1] : INITIAL_USERS[0]);
+    let targetUser = users.find(u => (u.email || '').toLowerCase() === userEmail);
+    if (!targetUser) {
+      if (targetRole === 'dgm') {
+        targetUser = INITIAL_USERS.find(u => u.role === 'dgm') || INITIAL_USERS[1];
+      } else if (targetRole === 'consumer') {
+        targetUser = INITIAL_USERS.find(u => u.role === 'consumer') || {
+          id: 'usr-consumer',
+          name: 'Citizen Consumer (Quick Check)',
+          email: 'consumer@citizen.in',
+          role: 'consumer',
+          department: 'Consumer Grievance & Public Awareness',
+          designation: 'Citizen / Consumer User',
+          division: 'National Consumer Verification'
+        };
+      } else if (targetRole === 'fbo') {
+        targetUser = INITIAL_USERS.find(u => u.role === 'fbo') || {
+          id: 'usr-fbo',
+          name: 'Apex Nutrition & Agro Foods Pvt. Ltd.',
+          email: 'fbo@lmcc.demo',
+          role: 'fbo',
+          department: 'Packaged Commodities Manufacturing & Self-Compliance',
+          designation: 'Registered Manufacturer / Brand Owner',
+          division: 'Food Business Operator (FSSAI Reg: 10020021000123)'
+        };
+      } else {
+        targetUser = INITIAL_USERS.find(u => u.role === 'inspector') || INITIAL_USERS[0];
+      }
+    }
     setCurrentUser(targetUser);
-    setCurrentPage('dashboard');
-    addToast({
-      type: 'success',
-      title: 'Welcome Back, ' + targetUser.name,
-      description: 'Successfully authenticated to Legal Metrology Inspection Portal.'
-    });
+    setIsLoggedIn(true);
+
+    if (targetRole === 'fbo' || targetUser.role === 'fbo') {
+      setCurrentPage('fbo-dashboard');
+      addToast({
+        type: 'success',
+        title: 'FBO Session Initialized',
+        description: 'Welcome back, Apex Nutrition & Agro Foods Pvt. Ltd. (Self-Compliance & Notice Desk)'
+      });
+      return;
+    }
+
+    if (targetUser.role === 'consumer') {
+      setCurrentScan(null);
+      setCurrentPage('scan');
+      addToast({
+        type: 'info',
+        title: 'Citizen Quick Check Active',
+        description: 'Instant verification session active. Your scan data will NOT be saved to the database. You can download your official PDF report immediately.'
+      });
+    } else {
+      setCurrentPage('dashboard');
+      addToast({
+        type: 'success',
+        title: 'Welcome Back, ' + targetUser.name,
+        description: targetUser.role === 'dgm'
+          ? 'Full Command Access: Complete statewide oversight of all inspectors and action requests.'
+          : 'Inspector Access: Scoped strictly to your inspected products and filed complaints.'
+      });
+    }
   };
 
   /**
@@ -559,19 +630,48 @@ export const AppProvider = ({ children }) => {
   };
 
   const logout = () => {
+    setIsLoggedIn(false);
+    setCurrentScan(null);
     setCurrentPage('landing');
     addToast({
       type: 'info',
       title: 'Logged Out',
-      description: 'You have been safely signed out of LexiScan.'
+      description: 'You have been safely signed out. Session closed.'
     });
   };
 
-  const startNewScan = (imageDataUrl, name, presetId) => {
-    const result = generateAnalysisForUpload(imageDataUrl, name, presetId);
+  const startNewScan = (imageDataUrl, name, presetId, ecommerceMeta) => {
+    const result = generateAnalysisForUpload(imageDataUrl, name, presetId, ecommerceMeta);
+
+    if (currentUser?.role === 'inspector') {
+      result.product.inspectorId = currentUser.id;
+      result.product.inspectorName = currentUser.name;
+      result.product.inspectorEmail = currentUser.email;
+      result.inspection.inspectorId = currentUser.id;
+      result.inspection.inspectorName = currentUser.name;
+      result.inspection.inspectorEmail = currentUser.email;
+    } else if (currentUser?.role === 'dgm') {
+      result.product.inspectorId = currentUser.id;
+      result.product.inspectorName = currentUser.name;
+      result.inspection.inspectorId = currentUser.id;
+      result.inspection.inspectorName = currentUser.name;
+    } else if (currentUser?.role === 'consumer') {
+      // Citizen check: flag as ephemeral, NEVER PERSIST TO DATABASE
+      result.product.isConsumerScan = true;
+      result.product.ephemeral = true;
+      result.inspection.isConsumerScan = true;
+      result.inspection.ephemeral = true;
+    }
+
     setCurrentScan(result);
-    setProducts(prev => [result.product, ...prev]);
-    setInspections(prev => [result.inspection, ...prev]);
+
+    // CRITICAL USER DIRECTIVE:
+    // "consumer ka data save nhi hoga wo instantly consumer kch check krra h toh wo us he time pdf download kr skta h uske bd nahi"
+    if (currentUser?.role !== 'consumer') {
+      setProducts(prev => [result.product, ...prev]);
+      setInspections(prev => [result.inspection, ...prev]);
+    }
+
     return result;
   };
 
@@ -669,9 +769,11 @@ export const AppProvider = ({ children }) => {
         inspectorRemarks: updatedProduct.inspectorRemarks
       };
 
-      // Also update in products & inspections state lists
-      setProducts(pList => pList.map(p => p.id === updatedProduct.id ? updatedProduct : p));
-      setInspections(iList => iList.map(i => (i.id === updatedInspection.id || i.productId === updatedProduct.id) ? updatedInspection : i));
+      // Only persist to global products & inspections if NOT a consumer scan
+      if (!updatedProduct.isConsumerScan && !updatedProduct.ephemeral && currentUser?.role !== 'consumer') {
+        setProducts(pList => pList.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+        setInspections(iList => iList.map(i => (i.id === updatedInspection.id || i.productId === updatedProduct.id) ? updatedInspection : i));
+      }
 
       return {
         product: updatedProduct,
@@ -837,18 +939,73 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  const isDGM = currentUser?.role === 'dgm';
+  const isInspector = currentUser?.role === 'inspector';
+  const isConsumer = currentUser?.role === 'consumer';
+  const isFBO = currentUser?.role === 'fbo';
+
+  // Role Scoping:
+  // DGM: Poora Access (all products, inspections, requests statewide)
+  // Inspector: Restricted Access ("sirf vhi data rhega jo check krega")
+  // Consumer: Zero Data Saved ("consumer ka data save nhi hoga")
+  const visibleProducts = useMemo(() => {
+    if (isDGM) return products;
+    if (isInspector) {
+      return products.filter(p => 
+        p.inspectorId === currentUser?.id || 
+        p.inspectorName === currentUser?.name ||
+        p.inspectorEmail === currentUser?.email ||
+        (!p.inspectorId && (p.id?.includes('001') || p.name?.includes('Amul')))
+      );
+    }
+    return [];
+  }, [products, currentUser, isDGM, isInspector]);
+
+  const visibleInspections = useMemo(() => {
+    if (isDGM) return inspections;
+    if (isInspector) {
+      return inspections.filter(i => 
+        i.inspectorId === currentUser?.id || 
+        i.inspectorName === currentUser?.name ||
+        i.inspectorEmail === currentUser?.email ||
+        (!i.inspectorId && (i.id?.includes('001') || i.productId?.includes('001')))
+      );
+    }
+    return [];
+  }, [inspections, currentUser, isDGM, isInspector]);
+
+  const visibleRequests = useMemo(() => {
+    if (isDGM) return inspectorRequests;
+    if (isInspector) {
+      return inspectorRequests.filter(r => 
+        r.inspectorId === currentUser?.id || 
+        r.inspectorEmail === currentUser?.email
+      );
+    }
+    return [];
+  }, [inspectorRequests, currentUser, isDGM, isInspector]);
+
   return (
     <AppContext.Provider
       value={{
         currentUser,
         updateUserProfile,
         currentPage,
-        products,
-        inspections,
+        isLoggedIn,
+        setIsLoggedIn,
+        isDGM,
+        isInspector,
+        isConsumer,
+        isFBO,
+        products: visibleProducts,
+        allProducts: products,
+        inspections: visibleInspections,
+        allInspections: inspections,
         rules,
         users,
-        inspectorRequests,
-        requests: inspectorRequests,
+        inspectorRequests: visibleRequests,
+        allRequests: inspectorRequests,
+        requests: visibleRequests,
         requestStats,
         submitInspectorRequest,
         submitRequest: submitInspectorRequest,
@@ -883,6 +1040,8 @@ export const AppProvider = ({ children }) => {
         isContactModalOpen,
         isFeaturesModalOpen,
         activeLandingSection,
+        loginInitialRole,
+        setLoginInitialRole,
         toasts,
         navigate,
         goBack,
@@ -930,7 +1089,7 @@ export const useApp = () => {
 };
 
 const MainContent = () => {
-  const { currentPage } = useApp();
+  const { currentPage, isLoggedIn, currentUser } = useApp();
 
   // Public non-dashboard routes
   if (currentPage === 'landing') {
@@ -944,6 +1103,11 @@ const MainContent = () => {
   // FBO Dedicated Portal Login
   if (currentPage === 'fbo-login') {
     return <FboLogin />;
+  }
+
+  // Route protection: If user is not logged in and attempts an internal route, show login
+  if (!isLoggedIn && !currentPage.startsWith('fbo-')) {
+    return <Login />;
   }
 
   // FBO Dedicated Portal Protected Views
@@ -986,6 +1150,27 @@ const MainContent = () => {
 
   // Dashboard Authenticated/Screening Routes
   const renderDashboardPage = () => {
+    // Consumer role is strictly restricted to Instant Scan & Analysis
+    // ("consumer ka data save nhi hoga wo instantly consumer kch check krra h toh wo us he time pdf download kr skta h uske bd nahi")
+    if (currentUser?.role === 'consumer') {
+      switch (currentPage) {
+        case 'scan':
+          return <Scan />;
+        case 'ecommerce-scan':
+          return <Scan defaultTab="ecommerce" />;
+        case 'analysis':
+          return <Analysis />;
+        case 'result':
+          return <Result />;
+        case 'rules':
+          return <Rules />;
+        case 'help':
+          return <Help />;
+        default:
+          return <Scan />;
+      }
+    }
+
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard />;
@@ -993,6 +1178,8 @@ const MainContent = () => {
         return <Requests />;
       case 'scan':
         return <Scan />;
+      case 'ecommerce-scan':
+        return <Scan defaultTab="ecommerce" />;
       case 'analysis':
         return <Analysis />;
       case 'result':
