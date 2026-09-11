@@ -36,7 +36,8 @@ import {
   Check,
   Camera,
   Loader2,
-  ScanLine
+  ScanLine,
+  Trash2
 } from 'lucide-react';
 import { 
   SAMPLE_FBO_LABELS, 
@@ -75,6 +76,48 @@ export const FboDashboard = () => {
       return INITIAL_FBO_AUDIT_HISTORY;
     }
   });
+
+  const [recordToDelete, setRecordToDelete] = useState(null);
+
+  useEffect(() => {
+    const handleSync = () => {
+      try {
+        const saved = localStorage.getItem('fbo_audit_history_v2');
+        if (saved) setAuditHistory(JSON.parse(saved));
+      } catch {}
+    };
+    window.addEventListener('fbo_history_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('fbo_history_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
+  }, []);
+
+  const handleDeleteRecord = (record) => {
+    setRecordToDelete(record);
+  };
+
+  const confirmDeleteRecord = () => {
+    if (!recordToDelete) return;
+    const updated = auditHistory.filter(item => item.id !== recordToDelete.id);
+    setAuditHistory(updated);
+    try {
+      localStorage.setItem('fbo_audit_history_v2', JSON.stringify(updated));
+      window.dispatchEvent(new Event('fbo_history_updated'));
+    } catch (e) {
+      console.warn('LocalStorage save error:', e);
+    }
+    if (selectedAuditModal?.id === recordToDelete.id) {
+      setSelectedAuditModal(null);
+    }
+    addToast({
+      type: 'success',
+      title: 'Audit Record Deleted',
+      description: `"${recordToDelete.productName}" removed from compliance history.`
+    });
+    setRecordToDelete(null);
+  };
 
   useEffect(() => {
     try {
@@ -1129,7 +1172,7 @@ export const FboDashboard = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="grid grid-cols-3 gap-2 pt-1 border-t border-slate-100">
+                      <div className="grid grid-cols-4 gap-1.5 pt-1 border-t border-slate-100">
                         <button
                           onClick={() => setSelectedAuditModal(item)}
                           className="px-2 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors cursor-pointer text-center min-h-[36px] flex items-center justify-center"
@@ -1152,6 +1195,13 @@ export const FboDashboard = () => {
                         >
                           <RefreshCw className="w-3 h-3" />
                           <span>Re-Scan</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteRecord(item)}
+                          title="Delete Record"
+                          className="px-2 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center justify-center min-h-[36px]"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -1272,6 +1322,14 @@ export const FboDashboard = () => {
                                   <RefreshCw className="w-3 h-3" />
                                   <span>Re-Scan</span>
                                 </button>
+
+                                <button
+                                  onClick={() => handleDeleteRecord(item)}
+                                  title="Delete Record"
+                                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
                               </div>
                             </td>
 
@@ -1382,6 +1440,17 @@ export const FboDashboard = () => {
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button
+                  onClick={() => {
+                    const toDelete = selectedAuditModal;
+                    handleDeleteRecord(toDelete);
+                  }}
+                  className="w-full sm:w-auto px-3.5 py-2.5 text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors min-h-[40px]"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete Record</span>
+                </button>
+
+                <button
                   onClick={() => handleDownloadPDF(selectedAuditModal)}
                   className="w-full sm:w-auto px-4 py-2.5 bg-[#065F46] text-white rounded-xl text-xs font-bold hover:bg-[#047857] flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px]"
                 >
@@ -1391,6 +1460,56 @@ export const FboDashboard = () => {
               </div>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {recordToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Delete Compliance Record?</h3>
+                <p className="text-xs text-slate-500">This record will be permanently deleted from your compliance history.</p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-1.5">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Product:</span>
+                <span className="font-semibold text-slate-800 text-right truncate max-w-[200px]">{recordToDelete.productName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Batch / Ref:</span>
+                <span className="font-mono text-slate-700">#{recordToDelete.id} (Batch {recordToDelete.batchNumber})</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Status:</span>
+                <span className={`font-semibold ${recordToDelete.status === 'Ready for Market' ? 'text-emerald-700' : 'text-rose-700'}`}>
+                  {recordToDelete.status} ({recordToDelete.complianceScore}%)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                onClick={() => setRecordToDelete(null)}
+                className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteRecord}
+                className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete Record</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1205,9 +1205,8 @@ const MainContent = () => {
     if (currentUser?.role === 'consumer') {
       switch (currentPage) {
         case 'scan':
-          return <Scan />;
         case 'ecommerce-scan':
-          return <Scan defaultTab="ecommerce" />;
+          return <Scan />;
         case 'analysis':
           return <Analysis />;
         case 'result':
@@ -1227,9 +1226,8 @@ const MainContent = () => {
       case 'requests':
         return <Requests />;
       case 'scan':
-        return <Scan />;
       case 'ecommerce-scan':
-        return <Scan defaultTab="ecommerce" />;
+        return <Scan />;
       case 'analysis':
         return <Analysis />;
       case 'result':

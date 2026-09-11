@@ -1303,8 +1303,8 @@ export const Navbar = ({ onToggleSidebar }) => {
     switch (currentPage) {
       case 'dashboard': return isDGM ? 'DLMO Central Command Dashboard' : 'Inspector Dashboard';
       case 'requests': return isDGM ? 'Central Inspector Requests Portal (DLMO)' : 'Field Complaints & Action Requests';
-      case 'scan': return 'Scan Product';
-      case 'ecommerce-scan': return 'E-Commerce Link Scanner (Rule 6(10))';
+      case 'scan':
+      case 'ecommerce-scan': return 'Scan Product';
       case 'analysis': return 'Analysis in Progress';
       case 'result': return 'Analysis Result';
       case 'reports': 
@@ -1325,8 +1325,8 @@ export const Navbar = ({ onToggleSidebar }) => {
     switch (currentPage) {
       case 'dashboard': return isDGM ? 'District-wide supervision and central request approval station' : 'Monitor inspections, violations, and filed request statuses';
       case 'requests': return isDGM ? 'Central Authority: Review incoming complaints, issue compounding orders & seizure notices' : 'Submit field infractions and track DLMO(District Legal Metrology Officer) decisions';
-      case 'scan': return 'Upload product image or capture using camera';
-      case 'ecommerce-scan': return 'Audit digital e-commerce marketplace listings against Rule 6(10) requirements';
+      case 'scan':
+      case 'ecommerce-scan': return 'Upload product image or capture using camera';
       case 'analysis': return 'Extracting packaging text and verifying rules...';
       case 'result': return 'Compliance analysis of uploaded product';
       case 'reports':

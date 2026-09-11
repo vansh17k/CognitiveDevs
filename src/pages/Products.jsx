@@ -88,15 +88,6 @@ export const Products = () => {
             <Plus className="w-3.5 h-3.5" />
             <span>Register & Scan Commodity</span>
           </button>
-
-          <button
-            onClick={() => navigate('ecommerce-scan')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100/80 text-[#0d4734] border border-emerald-300 font-medium text-xs rounded-lg shadow-xs transition-colors cursor-pointer"
-            title="Scan e-commerce link (Rule 6(10))"
-          >
-            <Globe className="w-3.5 h-3.5 text-emerald-700" />
-            <span>E-Com Link Scan</span>
-          </button>
         </div>
       </div>
 

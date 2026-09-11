@@ -200,13 +200,6 @@ export const Home = () => {
                 <span>Scan Product Label</span>
               </button>
               <button
-                onClick={() => navigate('ecommerce-scan')}
-                className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#0d4734] bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
-              >
-                <Globe className="w-4 h-4 text-emerald-700" />
-                <span>E-Com Link Scan (Rule 6(10))</span>
-              </button>
-              <button
                 onClick={() => scrollToLandingSection('features')}
                 className="px-5 py-3 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-2xs transition-all flex items-center gap-2 cursor-pointer"
               >
@@ -511,20 +504,13 @@ export const Home = () => {
                 </ul>
               </div>
 
-              <div className="pt-5 mt-4 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="pt-5 mt-4 border-t border-slate-200/80">
                 <button
                   onClick={() => navigate('scan')}
-                  className="w-full py-2.5 px-3 text-xs font-semibold text-[#0d4734] bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+                  className="w-full py-2.5 px-4 text-xs font-semibold text-[#0d4734] bg-white hover:bg-emerald-50 border border-emerald-200 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
                 >
                   <Scan className="w-3.5 h-3.5" />
-                  <span>Physical Scan</span>
-                </button>
-                <button
-                  onClick={() => navigate('ecommerce-scan')}
-                  className="w-full py-2.5 px-3 text-xs font-semibold text-emerald-900 bg-emerald-100/70 hover:bg-emerald-200/80 border border-emerald-300/80 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
-                >
-                  <Globe className="w-3.5 h-3.5 text-[#0d4734]" />
-                  <span>E-Com Link Scan</span>
+                  <span>Launch AI Label Scanner</span>
                 </button>
               </div>
             </div>
@@ -767,17 +753,10 @@ export const Home = () => {
             <div className="flex flex-wrap items-center gap-3 relative z-10 shrink-0">
               <button
                 onClick={() => navigate('scan')}
-                className="px-5 py-3 bg-white text-[#0d4734] hover:bg-emerald-50 font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 bg-white text-[#0d4734] hover:bg-emerald-50 font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Scan className="w-4 h-4" />
                 <span>Test Live Sample</span>
-              </button>
-              <button
-                onClick={() => navigate('ecommerce-scan')}
-                className="px-5 py-3 bg-emerald-900 text-emerald-100 hover:bg-emerald-950 font-bold text-xs sm:text-sm rounded-xl border border-emerald-700/60 shadow-md transition-all flex items-center gap-2 cursor-pointer"
-              >
-                <Globe className="w-4 h-4 text-emerald-300" />
-                <span>Audit E-Com Link</span>
               </button>
             </div>
           </div>
@@ -1175,7 +1154,6 @@ export const Home = () => {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider mb-3">Enforcement Modules</h4>
             <ul className="space-y-2 text-[11px] text-slate-400">
               <li><button onClick={() => navigate('scan')} className="hover:text-white transition-colors cursor-pointer">AI Label Scanner</button></li>
-              <li><button onClick={() => navigate('ecommerce-scan')} className="hover:text-white transition-colors cursor-pointer text-emerald-400">E-Commerce Link Scanner (Rule 6(10))</button></li>
               <li><button onClick={() => navigate('dashboard')} className="hover:text-white transition-colors cursor-pointer">Inspection Dashboard</button></li>
               <li><button onClick={() => navigate('reports')} className="hover:text-white transition-colors cursor-pointer">Compliance Reports</button></li>
               <li><button onClick={() => navigate('rules')} className="hover:text-white transition-colors cursor-pointer">Rule 6 Compendium</button></li>

@@ -142,16 +142,6 @@ export const Dashboard = () => {
             <Plus className="w-3.5 h-3.5" />
             <span>New Scan</span>
           </button>
-
-          <button
-            onClick={() => navigate('ecommerce-scan')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0d4734] bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl shadow-xs transition-colors cursor-pointer"
-            title="Audit e-commerce digital product link (Rule 6(10))"
-          >
-            <Globe className="w-3.5 h-3.5 text-emerald-700" />
-            <span>E-Com Link Scan</span>
-            <span className="text-[10px] bg-emerald-700 text-white px-1.5 py-0.2 rounded font-mono">6(10)</span>
-          </button>
         </div>
       </div>
 
