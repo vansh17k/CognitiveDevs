@@ -18,6 +18,7 @@ import {
 } from './data/fboData.js';
 import { generateAnalysisForUpload } from './utils.js';
 import { apiService } from './api.js';
+import { saveInspectionToFirestore } from './firebase.js';
 
 // Modals & Layout from components.jsx
 import { 
@@ -789,6 +790,21 @@ export const AppProvider = ({ children }) => {
       if (!updatedProduct.isConsumerScan && !updatedProduct.ephemeral && currentUser?.role !== 'consumer') {
         setProducts(pList => pList.map(p => p.id === updatedProduct.id ? updatedProduct : p));
         setInspections(iList => iList.map(i => (i.id === updatedInspection.id || i.productId === updatedProduct.id) ? updatedInspection : i));
+        // Persist statutory audit to Firebase Firestore
+        saveInspectionToFirestore({
+          id: updatedInspection.id,
+          productName: updatedProduct.name,
+          brand: updatedProduct.brand,
+          category: updatedProduct.category,
+          mrp: updatedProduct.mrp,
+          netQuantity: updatedProduct.netQuantity,
+          complianceScore: updatedScore,
+          status: updatedStatus,
+          violationsCount: updatedViolations.length,
+          scannedByRole: currentUser?.role || 'inspector',
+          inspectorName: currentUser?.name || 'Field Metrology Officer',
+          timestamp: new Date().toISOString()
+        }).catch(err => console.warn('[Firebase AutoSync Notice]:', err?.message));
       }
 
       return {

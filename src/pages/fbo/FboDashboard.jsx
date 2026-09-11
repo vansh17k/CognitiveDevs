@@ -459,7 +459,7 @@ export const FboDashboard = () => {
                 {/* Left: Product Image & Laser scanner overlay */}
                 <div className="lg:col-span-5 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
                   <h3 className="text-xs font-bold text-slate-800 mb-3 flex items-center justify-between">
-                    <span>Live OCR Scanning Feed</span>
+                    <span>Live PCR-2011 Scanning Feed</span>
                     <span className="text-[10px] text-emerald-600 font-mono flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                       ANALYZING

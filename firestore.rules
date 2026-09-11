@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Inspections collection: public verification and legal officer records
+    match /inspections/{inspectionId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Enforcement notices (Form LM-1)
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
