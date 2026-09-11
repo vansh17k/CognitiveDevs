@@ -15,7 +15,7 @@ import {
 export const PIPELINE_STAGES = [
   {
     id: 1,
-    title: 'Image Preprocessing & OCR',
+    title: 'Image Preprocessing & PCR-2011 Scanning',
     description: 'Normalizing contrast and text zone extraction',
     duration: '0.4s',
     delay: 400
@@ -117,7 +117,7 @@ export const InspectionPipelineScreen = ({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-base font-bold text-slate-900">
-                {isDone ? 'Inspection Pipeline Complete' : 'Statutory Inspection & OCR Processing'}
+                {isDone ? 'Inspection Pipeline Complete' : 'Statutory Inspection & PCR-2011 Scanning'}
               </h2>
               <span className="text-[10px] font-mono bg-emerald-50 text-[#0d4734] border border-emerald-300 font-bold px-2 py-0.5 rounded">
                 {reportId}
@@ -131,7 +131,7 @@ export const InspectionPipelineScreen = ({
               {isConsumer 
                 ? 'Citizen Verification • Zero Data Retention • Immediate ephemeral legal compliance evaluation.'
                 : isDgm
-                ? 'DGM Supervisory Level • Validating packaging imagery against Legal Metrology Rules, 2011.'
+                ? 'DLMO(District Legal Metrology Officer) Supervisory Level • Validating packaging imagery against Legal Metrology Rules, 2011.'
                 : 'Enforcement Wing • Rule 6, Rule 9 and Rule 18 penal provision bounding box audit.'}
             </p>
           </div>
@@ -203,7 +203,7 @@ export const InspectionPipelineScreen = ({
 
             <div className="mt-3.5 text-center">
               <p className="text-xs font-bold text-slate-900 truncate">{productTitle}</p>
-              <p className="text-[10px] text-slate-500 font-mono mt-0.5">High-Precision Neural OCR Feed</p>
+              <p className="text-[10px] text-slate-500 font-mono mt-0.5">High-Precision Neural PCR-2011 Scanning Feed</p>
             </div>
           </div>
 

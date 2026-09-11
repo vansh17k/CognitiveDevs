@@ -30,8 +30,8 @@ export default function LoginPage() {
         <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 p-8 shadow-xl">
           {/* Header Emblem */}
           <div className="text-center pb-6 border-b border-slate-100">
-            <div className="w-14 h-14 rounded-2xl bg-[#0d4734] text-white flex items-center justify-center mx-auto mb-3 shadow-sm">
-              <Scale className="w-7 h-7 text-amber-300" />
+            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-3 shadow-sm p-1">
+              <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
               Officer Sign In

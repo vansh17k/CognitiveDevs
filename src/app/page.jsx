@@ -3,7 +3,7 @@
  * LANDING PORTAL - PUBLIC HOMEPAGE (src/app/page.jsx)
  * ============================================================================
  * 
- * Public gateway to LexiScan:
+ * Public gateway to Suraksha1:
  * - National statutory banner & ministry credentials
  * - High-impact hero section with direct Scan Package CTA
  * - Quick stats (1,248+ commodities analyzed, 79% compliance rate)
@@ -251,7 +251,7 @@ export default function LandingPage() {
               <span className="font-extrabold text-sm">LS Enforcement</span>
             </div>
             <p className="text-slate-400 text-[11px] leading-relaxed">
-              LexiScan under the Ministry of Consumer Affairs, Food & Public Distribution, Government of India.
+              Suraksha1 under the Ministry of Consumer Affairs, Food & Public Distribution, Government of India.
             </p>
           </div>
           <div>

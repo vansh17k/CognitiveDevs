@@ -48,7 +48,7 @@ import {
 import { apiService } from '../../api.js';
 
 const FBO_INSPECTION_STEPS = [
-  { id: 1, title: 'Image Preprocessing & OCR', description: 'Normalizing contrast and text zone extraction', duration: '0.4s' },
+  { id: 1, title: 'Image Preprocessing & PCR-2011 Scanning', description: 'Normalizing contrast and text zone extraction', duration: '0.4s' },
   { id: 2, title: 'Text & Symbol Extraction', description: 'PaddleOCR / EasyOCR text recognition engine', duration: '0.6s' },
   { id: 3, title: 'Mandatory Declaration Detection', description: 'Parsing MRP, Net Qty, Mfg Address, Date', duration: '0.5s' },
   { id: 4, title: 'Rule Engine Validation', description: 'Validating against Packaged Commodities Rules, 2011', duration: '0.8s' },

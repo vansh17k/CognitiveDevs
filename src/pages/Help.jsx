@@ -36,8 +36,8 @@ export const Help = () => {
       a: 'For packages with net weight/volume up to 200g/200ml: minimum font height is 1.0mm (blown/embossed: 2.0mm). For packages between 200g-1kg / 200ml-1L: minimum font height is 2.0mm (blown: 4.0mm). For packages above 1kg/1L: minimum font height is 4.0mm (blown: 6.0mm).'
     },
     {
-      q: 'Can LexiScan results be submitted directly as legal evidence in court?',
-      a: 'LexiScan provides AI-assisted preliminary screening. While its report provides formatted timestamps, OCR token bounds, and rule references suitable for notice drafting, Section 18 of the Act requires the authorized inspector to verify the physical original sample packaging before formal compounding or prosecution under Section 36.'
+      q: 'Can Suraksha1 results be submitted directly as legal evidence in court?',
+      a: 'Suraksha1 provides AI-assisted preliminary screening. While its report provides formatted timestamps, OCR token bounds, and rule references suitable for notice drafting, Section 18 of the Act requires the authorized inspector to verify the physical original sample packaging before formal compounding or prosecution under Section 36.'
     },
     {
       q: 'What is the mandatory format for declaring the Maximum Retail Price (MRP)?',
@@ -92,8 +92,8 @@ export const Help = () => {
       a: 'While QR codes and barcodes assist traceability, statutory compliance requires all 8 mandatory declarations to be visibly printed in human-readable text on the packaging. Reliance solely on QR codes for mandatory declarations without physical text on the label is a statutory non-compliance.'
     },
     {
-      q: 'How does the central DGM action queue process field inspector seizure requests?',
-      a: 'Field inspectors submit seizure requests or compounding recommendations from the field. The Deputy Director/DGM reviews the high-resolution label scans, violation logs, and proposed compounding fines in the Central Queue to grant formal legal approval or order further investigation.'
+      q: 'How does the central DLMO action queue process field inspector seizure requests?',
+      a: 'Field inspectors submit seizure requests or compounding recommendations from the field. The DLMO(District Legal Metrology Officer) reviews the high-resolution label scans, violation logs, and proposed compounding fines in the Central Queue to grant formal legal approval or order further investigation.'
     },
     {
       q: 'Can inspection reports and historical audit logs be exported for departmental audits?',

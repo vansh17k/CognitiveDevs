@@ -1,4 +1,4 @@
-// Firebase Client Configuration & Service Layer for LexiScan Legal Metrology Suite
+// Firebase Client Configuration & Service Layer for Suraksha1 Legal Metrology Suite
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { 
   getFirestore, 
@@ -16,9 +16,9 @@ import {
 // Default / fallback Firebase client config
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDummyKeyForLegalMetrologyPCR2011",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "lexiscan-metrology.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "lexiscan-metrology-prod",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "lexiscan-metrology.appspot.com",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "suraksha1-metrology.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "suraksha1-metrology-prod",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "suraksha1-metrology.appspot.com",
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "373947506839",
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:373947506839:web:a1b2c3d4e5f6"
 };

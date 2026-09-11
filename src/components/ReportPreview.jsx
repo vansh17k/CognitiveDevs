@@ -22,8 +22,8 @@ export const ReportPreview = ({ product, inspection, onPrint }) => {
       {/* Header Emblem & Ministry Banner */}
       <div className="border-b-2 border-slate-900 pb-6 text-center">
         <div className="flex justify-center mb-2">
-          <div className="w-14 h-14 rounded-full bg-[#0d4734] text-white flex items-center justify-center border-2 border-amber-400">
-            <Scale className="w-7 h-7 text-amber-300" />
+          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center border-2 border-emerald-700 p-1 shadow-sm">
+            <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
           </div>
         </div>
         <h2 className="text-lg sm:text-xl font-extrabold uppercase tracking-wide text-slate-900">

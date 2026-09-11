@@ -293,7 +293,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
                 </span>
               </div>
               <p className="text-xs text-slate-700 mt-1 leading-relaxed max-w-2xl">
-                High-fidelity OCR bounding box canvas, Section 36 statutory penal provisions, and Rule 6 mandatory declarations audit.
+                High-fidelity PCR-2011 scanning bounding box canvas, Section 36 statutory penal provisions, and Rule 6 mandatory declarations audit.
               </p>
             </div>
           </div>
@@ -402,7 +402,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
 
                     <div className="space-y-1">
                       <p className="text-base sm:text-lg font-bold text-slate-900">Live Device Camera</p>
-                      <span className="text-xs text-slate-500 font-medium block">Real-time label capture & instant OCR</span>
+                      <span className="text-xs text-slate-500 font-medium block">Real-time label capture & instant PCR-2011 scanning</span>
                     </div>
                     
                     <button 
@@ -564,7 +564,7 @@ export const Scan = ({ defaultTab = 'physical' }) => {
             <div className="flex items-center justify-between mb-3">
               <div>
                 <h3 className="text-xs font-bold text-slate-900">1-Click Test Packaging Samples</h3>
-                <p className="text-[11px] text-slate-500">Test instant Legal Metrology OCR analysis on pre-verified physical commodities:</p>
+                <p className="text-[11px] text-slate-500">Test instant Legal Metrology PCR-2011 scanning analysis on pre-verified physical commodities:</p>
               </div>
               <span className="text-[10px] bg-emerald-50 text-[#0d4734] font-semibold px-2 py-0.5 rounded">
                 Ready to verify

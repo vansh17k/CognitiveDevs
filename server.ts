@@ -1,5 +1,5 @@
 /**
- * LS (LexiScan) Backend Server
+ * LS (Suraksha1) Backend Server
  * =========================================================
  * 
  * 🎓 DJANGO DEVELOPER GUIDE:
@@ -200,7 +200,7 @@ let requestsDb = [
 const handleHealthCheck = (req: express.Request, res: express.Response) => {
   res.json({
     status: 'ok',
-    service: 'LS LexiScan Backend',
+    service: 'LS Suraksha1 Backend',
     timestamp: new Date().toISOString(),
     aiEngine: Boolean(process.env.GEMINI_API_KEY) ? 'Gemini Vision AI Active' : 'Rule Engine Active'
   });
@@ -640,7 +640,7 @@ Provide 3 sections:
 - Step 1: Immediate Quarantine: Withhold distribution of the non-compliant packaging batch from factory or central warehouse.
 - Step 2: Packaging Artwork Rectification: Revise cylinder/plate engraving to ensure text heights meet or exceed Table 1 thresholds.
 - Step 3: Formal Compounding Application: If an inspection notice has been issued, file a compounding petition under Section 48 attaching corrected proof sheets.
-- Step 4: Digital Verification: Re-verify the updated artwork via LexiScan to obtain a verified compliance audit certificate before dispatch.`
+- Step 4: Digital Verification: Re-verify the updated artwork via Suraksha1 to obtain a verified compliance audit certificate before dispatch.`
     });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
@@ -969,7 +969,7 @@ async function startServer() {
           }
         });
       } else {
-        res.status(200).send('<!doctype html><html><head><meta charset="utf-8"><title>LexiScan</title></head><body style="font-family:sans-serif;padding:2rem;"><h2>LexiScan Regulatory Compliance Suite</h2><p>Application is starting. Please refresh in a moment.</p></body></html>');
+        res.status(200).send('<!doctype html><html><head><meta charset="utf-8"><title>Suraksha1</title></head><body style="font-family:sans-serif;padding:2rem;"><h2>Suraksha1 Regulatory Compliance Suite</h2><p>Application is starting. Please refresh in a moment.</p></body></html>');
       }
     });
   }
@@ -984,7 +984,7 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n======================================================`);
-    console.log(`✅ LexiScan Backend Server running on http://0.0.0.0:${PORT}`);
+    console.log(`✅ Suraksha1 Backend Server running on http://0.0.0.0:${PORT}`);
     console.log(`📦 Architecture: Express.js REST API + Vite Full-Stack`);
     console.log(`🐍 Django Analogy: views.py & urls.py active at /api/*`);
     console.log(`======================================================\n`);

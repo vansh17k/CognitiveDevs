@@ -452,7 +452,7 @@ export const Violations = () => {
             onClick={() => navigate('requests')}
             className="text-xs font-bold text-[#0d4734] hover:underline flex items-center gap-1"
           >
-            <span>DGM Enforcement Actions →</span>
+            <span>DLMO Enforcement Actions →</span>
           </button>
         </div>
 

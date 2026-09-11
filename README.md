@@ -1,10 +1,10 @@
-# LS: LexiScan
+# LS: Suraksha1
 
 AI-Powered Packaging Compliance Engine under the **Legal Metrology (Packaged Commodities) Rules, 2011 (PCR 2011)** & Legal Metrology Act, 2009.
 
 ## 🏛️ System Overview
 
-The LS (LexiScan) automated enforcement platform assists field inspectors, manufacturers, and state enforcement directorates in verifying statutory declarations on pre-packaged commodities sold in India.
+The LS (Suraksha1) automated enforcement platform assists field inspectors, manufacturers, and state enforcement directorates in verifying statutory declarations on pre-packaged commodities sold in India.
 
 ### 📋 Mandatory Rule 6 Declarations Checked
 1. **Manufacturer / Packer / Importer Details** (Rule 6(1)(a) & 6(1)(ab))

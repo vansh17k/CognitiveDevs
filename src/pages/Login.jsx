@@ -83,7 +83,12 @@ export const Login = () => {
       <header className="bg-white border-b border-slate-200 shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Emblem className="w-9 h-11 text-slate-800 shrink-0" />
+            <img 
+              src="/images/logo.png" 
+              alt="SURAKSHA1 Logo" 
+              className="w-11 h-11 object-contain shrink-0" 
+              referrerPolicy="no-referrer" 
+            />
             <div className="border-l border-slate-300 pl-3 leading-tight">
               <div className="font-extrabold text-xs sm:text-sm text-slate-900 tracking-wide">
                 विधिक मापविज्ञान प्रभाग • LEGAL METROLOGY DIVISION
@@ -115,16 +120,17 @@ export const Login = () => {
             <div className="space-y-6 relative z-10">
               {/* Brand Header with Emblem */}
               <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-[#0d4734]/90 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-sm shrink-0">
-                  {portalMode === 'fbo' ? (
-                    <Building2 className="w-6 h-6 text-emerald-400" />
-                  ) : (
-                    <Scale className="w-6 h-6 text-emerald-400" />
-                  )}
+                <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-500/30 flex items-center justify-center p-1 shadow-sm shrink-0">
+                  <img 
+                    src="/images/logo.png" 
+                    alt="SURAKSHA1 Logo" 
+                    className="w-full h-full object-contain" 
+                    referrerPolicy="no-referrer" 
+                  />
                 </div>
                 <div>
                   <h2 className="text-base font-bold tracking-tight text-white leading-tight">
-                    {portalMode === 'fbo' ? 'LexiScan FBO Portal' : 'LexiScan Enforcement'}
+                    {portalMode === 'fbo' ? 'Suraksha1 FBO Portal' : 'Suraksha1 Enforcement'}
                   </h2>
                   <p className="text-xs font-semibold text-emerald-400">
                     Legal Metrology PCR-2011
@@ -283,7 +289,7 @@ export const Login = () => {
                       </div>
                     </div>
 
-                    {/* DGM Officer Card */}
+                    {/* DLMO Officer Card */}
                     <div
                       id="demo-login-dgm"
                       onClick={() => handleSelectOfficer('dgm')}
@@ -295,7 +301,7 @@ export const Login = () => {
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs sm:text-sm font-bold text-slate-900">
-                          DGM Officer
+                          DLMO(District Legal Metrology Officer)
                         </span>
                         <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
                           Authority
@@ -426,7 +432,7 @@ export const Login = () => {
 
       {/* Statutory Footer */}
       <footer className="bg-white border-t border-slate-200 py-3 text-center text-[11px] text-slate-500 shrink-0">
-        Legal Metrology Compliance & Verification System (LexiScan) • Government of India
+        Legal Metrology Compliance & Verification System (Suraksha1) • Government of India
       </footer>
     </div>
   );

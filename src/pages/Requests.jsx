@@ -258,12 +258,12 @@ export const Requests = () => {
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
             <FileText className="w-6 h-6 text-emerald-300" />
-            <span>{isDGM ? 'Deputy General Manager (DGM) — Inspector Requests Portal' : 'Inspector Complaint & Action Requests'}</span>
+            <span>{isDGM ? 'DLMO(District Legal Metrology Officer) — Inspector Requests Portal' : 'Inspector Complaint & Action Requests'}</span>
           </h1>
           <p className="text-xs sm:text-sm text-emerald-100/90 mt-1 max-w-2xl">
             {isDGM 
               ? 'Centralized control room receiving all enforcement requests, seizure notices, and infraction filings submitted by Field Inspectors.'
-              : 'Submit field violation reports, request seizure summons, and track real-time decisions from the Deputy General Manager (DGM).'}
+              : 'Submit field violation reports, request seizure summons, and track real-time decisions from the DLMO(District Legal Metrology Officer).'}
           </p>
         </div>
 
@@ -316,7 +316,7 @@ export const Requests = () => {
             <Clock className="w-4 h-4 text-amber-600" />
           </div>
           <div className="text-2xl font-black text-amber-900">{stats.pending}</div>
-          <div className="text-[10px] text-amber-700 mt-0.5">Awaiting DGM triage</div>
+          <div className="text-[10px] text-amber-700 mt-0.5">Awaiting DLMO triage</div>
         </div>
 
         <div 
@@ -394,7 +394,7 @@ export const Requests = () => {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
               </span>
               <h3 className="text-sm font-bold text-amber-950">
-                New Requests Awaiting DGM Action ({newPendingRequests.length})
+                New Requests Awaiting DLMO Action ({newPendingRequests.length})
               </h3>
             </div>
             <span className="text-xs text-amber-800 font-medium">Automatic Central Routing</span>
@@ -518,7 +518,7 @@ export const Requests = () => {
           </div>
 
           <div className="text-[11px] text-slate-500">
-            Workflow: <span className="font-semibold text-slate-700">Inspector ➔ DGM ➔ Action ➔ Inspector</span>
+            Workflow: <span className="font-semibold text-slate-700">Inspector ➔ DLMO ➔ Action ➔ Inspector</span>
           </div>
         </div>
 
@@ -529,7 +529,7 @@ export const Requests = () => {
             <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
               {isDGM 
                 ? 'No requests match the selected filters.' 
-                : 'You have not submitted any complaints yet. Click "Create New Request" to submit one for DGM review.'}
+                : 'You have not submitted any complaints yet. Click "Create New Request" to submit one for DLMO review.'}
             </p>
             {!isDGM && (
               <button
@@ -578,11 +578,11 @@ export const Requests = () => {
                       {req.description}
                     </p>
 
-                    {/* DGM Remarks Preview Banner */}
+                    {/* DLMO Remarks Preview Banner */}
                     {req.dgmRemarks && (
                       <div className="mt-2 text-xs bg-emerald-50 border border-emerald-200 rounded-lg px-2.5 py-1 text-emerald-900 flex items-center gap-1.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                        <span className="font-semibold">DGM Decision:</span>
+                        <span className="font-semibold">DLMO Decision:</span>
                         <span className="truncate">{req.dgmRemarks}</span>
                       </div>
                     )}
@@ -632,7 +632,7 @@ export const Requests = () => {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white">Create New Complaint / Action Request</h3>
-                  <p className="text-xs text-emerald-200">Automatically routed to Deputy General Manager (DGM) Central Desk</p>
+                  <p className="text-xs text-emerald-200">Automatically routed to DLMO(District Legal Metrology Officer) Central Desk</p>
                 </div>
               </div>
               <button 
@@ -647,7 +647,7 @@ export const Requests = () => {
             <form onSubmit={handleInspectorSubmit} className="p-6 overflow-y-auto space-y-4 text-xs">
               <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-emerald-900">
                 <span className="font-bold block mb-0.5">Enforcement Protocol:</span>
-                This complaint will be instantly stored in the central database and queued in the DGM Portal for statutory compounding or seizure notice sign-off.
+                This complaint will be instantly stored in the central database and queued in the DLMO Portal for statutory compounding or seizure notice sign-off.
               </div>
 
               {/* Title */}
@@ -807,7 +807,7 @@ export const Requests = () => {
                   className="inline-flex items-center gap-1.5 px-5 py-2 font-bold text-white bg-[#0d4734] hover:bg-[#083325] rounded-xl shadow-sm"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Submit to DGM Central Desk</span>
+                  <span>Submit to DLMO Central Desk</span>
                 </button>
               </div>
             </form>
@@ -918,13 +918,13 @@ export const Requests = () => {
                 </div>
               </div>
 
-              {/* DGM Action Box (Central Authority Controls) */}
+              {/* DLMO Action Box (Central Authority Controls) */}
               {isDGM ? (
                 <div className="bg-emerald-50/70 border-2 border-emerald-600/40 rounded-2xl p-4.5 space-y-3.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-emerald-950 font-bold">
                       <ShieldCheck className="w-4 h-4 text-emerald-800" />
-                      <span>Deputy General Manager (DGM) Decision Station</span>
+                      <span>DLMO(District Legal Metrology Officer) Decision Station</span>
                     </div>
                     <span className="text-[10px] font-bold bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">
                       Central Authority
@@ -933,13 +933,13 @@ export const Requests = () => {
 
                   <div>
                     <label className="block font-bold text-slate-800 mb-1">
-                      Official DGM Remarks / Compounding Order / Seizure Summons:
+                      Official DLMO Remarks / Compounding Order / Seizure Summons:
                     </label>
                     <textarea
                       rows={3}
                       value={dgmRemarksInput}
                       onChange={(e) => setDgmRemarksInput(e.target.value)}
-                      placeholder="Enter official DGM decision, Section 36 penalty amount, compounded fee order, or instructions for the Field Inspector..."
+                      placeholder="Enter official DLMO decision, Section 36 penalty amount, compounded fee order, or instructions for the Field Inspector..."
                       className="w-full p-2.5 bg-white border border-emerald-300 rounded-xl focus:ring-2 focus:ring-emerald-700 focus:outline-hidden text-xs"
                     />
                   </div>
@@ -993,13 +993,13 @@ export const Requests = () => {
                   </div>
                 </div>
               ) : (
-                /* Inspector View of DGM Remarks */
+                /* Inspector View of DLMO Remarks */
                 selectedRequest.dgmRemarks ? (
                   <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 space-y-1">
                     <div className="flex items-center justify-between text-emerald-950 font-bold">
                       <span className="flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                        Deputy General Manager (DGM) Action & Remarks
+                        DLMO(District Legal Metrology Officer) Action & Remarks
                       </span>
                       <span className="text-[10px] text-emerald-700 font-normal">{selectedRequest.dgmActionDate}</span>
                     </div>
@@ -1007,13 +1007,13 @@ export const Requests = () => {
                       {selectedRequest.dgmRemarks}
                     </p>
                     <div className="text-[10px] text-emerald-700 pt-1 font-semibold">
-                      Officer: {selectedRequest.dgmOfficerName || 'Dr. Anita Verma (DGM)'}
+                      Officer: {selectedRequest.dgmOfficerName || 'Dr. Anita Verma (DLMO)'}
                     </div>
                   </div>
                 ) : (
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 text-xs text-amber-900 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>This request is currently queued at the DGM Central Desk. You will receive an immediate update once the DGM reviews this file.</span>
+                    <span>This request is currently queued at the DLMO Central Desk. You will receive an immediate update once the DLMO reviews this file.</span>
                   </div>
                 )
               )}
@@ -1022,7 +1022,7 @@ export const Requests = () => {
             {/* Footer */}
             <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
               <span className="text-[11px] text-slate-500">
-                LexiScan Enforcement ID: {selectedRequest.id}
+                Suraksha1 Enforcement ID: {selectedRequest.id}
               </span>
 
               <button

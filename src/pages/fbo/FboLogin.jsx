@@ -76,9 +76,12 @@ export const FboLogin = () => {
             className="flex items-center gap-3 cursor-pointer"
             onClick={() => navigate('landing')}
           >
-            <div className="w-8 h-8 rounded-xl bg-[#0d4734] flex items-center justify-center text-white shadow-sm">
-              <Building2 className="w-4 h-4" />
-            </div>
+            <img 
+              src="/images/logo.png" 
+              alt="SURAKSHA1 Logo" 
+              className="w-9 h-9 object-contain shrink-0" 
+              referrerPolicy="no-referrer" 
+            />
             <div>
               <span className="font-bold text-base text-slate-900 tracking-tight">FBO Compliance Portal</span>
               <span className="hidden sm:inline-block ml-2 text-[11px] font-semibold text-[#0d4734] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">

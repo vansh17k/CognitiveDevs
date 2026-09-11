@@ -57,7 +57,7 @@ export const normalizeToAuditRecord = (scanOrProduct, role = 'inspector') => {
   const mfgDate = product.packingDate || product.mfgDate || '06/2026';
   const manufacturer = product.manufacturerName || product.manufacturerAddress || 'Apex Packaging Ltd., Plot 12, Industrial Area, Indore - 452001, MP';
   const fssaiLicense = product.fssaiLicense || product.fssaiNumber || '10020022001948';
-  const consumerCare = product.consumerCare || product.consumerCareContact || '1800-103-1947 | wecare@lexiscan.in';
+  const consumerCare = product.consumerCare || product.consumerCareContact || '1800-103-1947 | wecare@suraksha1.in';
   const countryOfOrigin = product.countryOfOrigin || 'India';
   const imageUrl = product.imageUrl || 'https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=800&auto=format&fit=crop&q=80';
 

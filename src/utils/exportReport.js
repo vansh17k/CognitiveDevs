@@ -286,7 +286,7 @@ export const exportReportToPDF = (product, inspection, reportItems, remarks = ''
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        `LexiScan PCR-2011 Regulatory Engine • Page ${i} of ${totalPages} • Generated on ${new Date().toLocaleString()}`,
+        `Suraksha1 PCR-2011 Regulatory Engine • Page ${i} of ${totalPages} • Generated on ${new Date().toLocaleString()}`,
         pageWidth / 2,
         pageHeight - 6,
         { align: 'center' }

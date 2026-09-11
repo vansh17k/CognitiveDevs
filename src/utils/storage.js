@@ -33,7 +33,7 @@ export function getFromStorage(key, defaultValue) {
     if (!raw) return defaultValue;
     return JSON.parse(raw);
   } catch (error) {
-    console.warn(`[LexiScan Storage] Failed to read key: "${key}"`, error);
+    console.warn(`[Suraksha1 Storage] Failed to read key: "${key}"`, error);
     return defaultValue;
   }
 }
@@ -51,7 +51,7 @@ export function saveToStorage(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.warn(`[LexiScan Storage] Failed to write key: "${key}"`, error);
+    console.warn(`[Suraksha1 Storage] Failed to write key: "${key}"`, error);
     return false;
   }
 }
@@ -66,6 +66,6 @@ export function removeFromStorage(key) {
   try {
     localStorage.removeItem(key);
   } catch (error) {
-    console.warn(`[LexiScan Storage] Failed to remove key: "${key}"`, error);
+    console.warn(`[Suraksha1 Storage] Failed to remove key: "${key}"`, error);
   }
 }

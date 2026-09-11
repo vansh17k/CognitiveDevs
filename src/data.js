@@ -1,4 +1,4 @@
-// Pure JavaScript Dataset for LexiScan
+// Pure JavaScript Dataset for Suraksha1
 
 export const INITIAL_USERS = [
   {
@@ -16,11 +16,11 @@ export const INITIAL_USERS = [
   },
   {
     id: 'usr-002',
-    name: 'Dr. Anita Verma (DGM)',
+    name: 'Dr. Anita Verma (DLMO)',
     email: 'dgm@lmcc.demo',
     role: 'dgm',
     department: 'Directorate of Legal Metrology',
-    designation: 'Deputy General Manager (DGM)',
+    designation: 'DLMO(District Legal Metrology Officer)',
     division: 'State Headquarters, Bhopal',
     mobile: '+91 94250 98765',
     status: 'active',
@@ -98,13 +98,13 @@ export const INITIAL_REQUESTS = [
     productId: 'prod-2',
     productName: 'Amul Taaza Toned Milk (500ml)',
     imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&auto=format&fit=crop&q=80',
-    dgmRemarks: 'Field evidence acknowledged. Legal Section drafting Section 36 seizure notice for DGM sign-off.',
+    dgmRemarks: 'Field evidence acknowledged. Legal Section drafting Section 36 seizure notice for DLMO sign-off.',
     dgmActionDate: '2026-08-30 16:15',
-    dgmOfficerName: 'Dr. Anita Verma (DGM)',
+    dgmOfficerName: 'Dr. Anita Verma (DLMO)',
     timeline: [
       { status: 'Submitted', timestamp: '2026-08-30 14:30', note: 'Request submitted with photo evidence by Inspector Rajesh Sharma', by: 'Inspector Rajesh Sharma' },
-      { status: 'Pending Review', timestamp: '2026-08-30 14:35', note: 'Auto-routed and queued in DGM Central Review Portal', by: 'System' },
-      { status: 'Under Review', timestamp: '2026-08-30 16:15', note: 'DGM reviewed lab findings and assigned legal counsel for drafting seizure order.', by: 'Dr. Anita Verma (DGM)' }
+      { status: 'Pending Review', timestamp: '2026-08-30 14:35', note: 'Auto-routed and queued in DLMO Central Review Portal', by: 'System' },
+      { status: 'Under Review', timestamp: '2026-08-30 16:15', note: 'DLMO reviewed lab findings and assigned legal counsel for drafting seizure order.', by: 'Dr. Anita Verma (DLMO)' }
     ]
   },
   {
@@ -125,12 +125,12 @@ export const INITIAL_REQUESTS = [
     imageUrl: 'https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400&auto=format&fit=crop&q=80',
     dgmRemarks: 'Approved for issuing compounding notice under Section 36 of Legal Metrology Act, 2009. Fine: ₹25,000.',
     dgmActionDate: '2026-08-29 15:40',
-    dgmOfficerName: 'Dr. Anita Verma (DGM)',
+    dgmOfficerName: 'Dr. Anita Verma (DLMO)',
     timeline: [
       { status: 'Submitted', timestamp: '2026-08-29 11:15', note: 'Complaint submitted by Inspector Rajesh Sharma', by: 'Inspector Rajesh Sharma' },
-      { status: 'Pending Review', timestamp: '2026-08-29 11:20', note: 'Queued in DGM Central Portal', by: 'System' },
-      { status: 'Under Review', timestamp: '2026-08-29 13:00', note: 'DGM initiated technical verification', by: 'Dr. Anita Verma (DGM)' },
-      { status: 'Approved', timestamp: '2026-08-29 15:40', note: 'DGM approved notice for compounding issuance.', by: 'Dr. Anita Verma (DGM)' }
+      { status: 'Pending Review', timestamp: '2026-08-29 11:20', note: 'Queued in DLMO Central Portal', by: 'System' },
+      { status: 'Under Review', timestamp: '2026-08-29 13:00', note: 'DLMO initiated technical verification', by: 'Dr. Anita Verma (DLMO)' },
+      { status: 'Approved', timestamp: '2026-08-29 15:40', note: 'DLMO approved notice for compounding issuance.', by: 'Dr. Anita Verma (DLMO)' }
     ]
   },
   {
@@ -151,13 +151,13 @@ export const INITIAL_REQUESTS = [
     imageUrl: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&auto=format&fit=crop&q=80',
     dgmRemarks: 'Importer furnished rectified label stickers and paid compounding fee of ₹50,000. Case closed as resolved.',
     dgmActionDate: '2026-08-29 17:00',
-    dgmOfficerName: 'Dr. Anita Verma (DGM)',
+    dgmOfficerName: 'Dr. Anita Verma (DLMO)',
     timeline: [
       { status: 'Submitted', timestamp: '2026-08-28 09:45', note: 'Submitted by Inspector Meera Sen', by: 'Inspector Meera Sen' },
-      { status: 'Pending Review', timestamp: '2026-08-28 10:00', note: 'Received by DGM Portal', by: 'System' },
-      { status: 'Under Review', timestamp: '2026-08-28 14:00', note: 'DGM issued hearing notice to importer', by: 'Dr. Anita Verma (DGM)' },
-      { status: 'Approved', timestamp: '2026-08-28 16:30', note: 'DGM approved compounding settlement order', by: 'Dr. Anita Verma (DGM)' },
-      { status: 'Resolved', timestamp: '2026-08-29 17:00', note: 'Fine collected and case officially marked resolved.', by: 'Dr. Anita Verma (DGM)' }
+      { status: 'Pending Review', timestamp: '2026-08-28 10:00', note: 'Received by DLMO Portal', by: 'System' },
+      { status: 'Under Review', timestamp: '2026-08-28 14:00', note: 'DLMO issued hearing notice to importer', by: 'Dr. Anita Verma (DLMO)' },
+      { status: 'Approved', timestamp: '2026-08-28 16:30', note: 'DLMO approved compounding settlement order', by: 'Dr. Anita Verma (DLMO)' },
+      { status: 'Resolved', timestamp: '2026-08-29 17:00', note: 'Fine collected and case officially marked resolved.', by: 'Dr. Anita Verma (DLMO)' }
     ]
   },
   {
@@ -181,7 +181,7 @@ export const INITIAL_REQUESTS = [
     dgmOfficerName: '',
     timeline: [
       { status: 'Submitted', timestamp: '2026-08-31 08:20', note: 'Urgent seizure request submitted by Inspector V. Ramanathan', by: 'Inspector V. Ramanathan' },
-      { status: 'Pending Review', timestamp: '2026-08-31 08:21', note: 'Queued at DGM Desk for priority decision', by: 'System' }
+      { status: 'Pending Review', timestamp: '2026-08-31 08:21', note: 'Queued at DLMO Desk for priority decision', by: 'System' }
     ]
   }
 ];

@@ -44,12 +44,15 @@ export const Navbar = () => {
           onClick={() => navigate('landing')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#0d4734] text-white flex items-center justify-center shadow-md group-hover:bg-[#083325] transition-colors">
-            <Scale className="w-5 h-5 text-amber-300" />
-          </div>
+          <img 
+            src="/images/logo.png" 
+            alt="SURAKSHA1 Logo" 
+            className="w-10 h-10 object-contain shrink-0" 
+            referrerPolicy="no-referrer" 
+          />
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base tracking-tight text-slate-900">LexiScan</span>
+              <span className="font-extrabold text-base tracking-tight text-slate-900">Suraksha1</span>
               <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-[#0d4734] border border-emerald-200">
                 PCR-2011
               </span>

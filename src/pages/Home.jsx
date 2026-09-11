@@ -104,7 +104,7 @@ export const Home = () => {
       addToast({
         type: 'success',
         title: 'Inquiry Submitted',
-        description: 'Your inquiry #LEXISCAN-' + Math.floor(100000 + Math.random() * 900000) + ' has been registered with the Legal Metrology Desk.'
+        description: 'Your inquiry #SURAKSHA1-' + Math.floor(100000 + Math.random() * 900000) + ' has been registered with the Legal Metrology Desk.'
       });
       
       setTimeout(() => {
@@ -124,16 +124,21 @@ export const Home = () => {
     <div className="min-h-screen bg-[#f7faf8] text-slate-900 flex flex-col font-sans scroll-smooth">
       {/* Top Navigation Bar */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
           {/* Left: Logo & Emblem */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             <div 
               className="flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none" 
               onClick={() => scrollToLandingSection('home')}
             >
-              <Emblem size={32} className="text-slate-800" />
+              <img 
+                src="/images/logo.png" 
+                alt="SURAKSHA1 Logo" 
+                className="w-15 h-15 object-contain shrink-0" 
+                referrerPolicy="no-referrer"
+              />
               <div className="flex flex-col">
-                <span className="font-bold text-lg text-slate-800 tracking-tight leading-none">LexiScan</span>
+                <span className="font-bold text-lg text-slate-800 tracking-tight leading-none">SURAKSHA1</span>
                 <span className="text-[10px] text-slate-500 font-medium">Govt. of India</span>
               </div>
             </div>
@@ -168,7 +173,7 @@ export const Home = () => {
             </div>
 
             <h1 id="hero-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0d4734] tracking-tight leading-tight">
-              LexiScan
+              SURAKSHA1
             </h1>
             
             <h2 className="text-base sm:text-lg font-bold text-slate-700">
@@ -1143,11 +1148,16 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2.5 text-white">
-              <Emblem size={28} className="text-white" />
-              <span className="font-bold text-base tracking-tight">LexiScan Portal</span>
+              <img 
+                src="/images/logo.png" 
+                alt="Suraksha1 Logo" 
+                className="w-8 h-8 object-contain shrink-0 bg-white rounded p-0.5" 
+                referrerPolicy="no-referrer"
+              />
+              <span className="font-bold text-base tracking-tight">Suraksha1 Portal</span>
             </div>
             <p className="text-slate-400 text-[11px] leading-relaxed">
-              LexiScan — Automated detection & validation of mandatory declarations under PCR 2011.
+              Suraksha1 — Automated detection & validation of mandatory declarations under PCR 2011.
             </p>
           </div>
 

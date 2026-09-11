@@ -394,7 +394,7 @@ export const Settings = () => {
                   >
                     <option value="Inspector">Field Inspector</option>
                     <option value="Senior Inspector">Senior Inspector</option>
-                    <option value="Deputy General Manager (DGM)">Deputy General Manager (DGM)</option>
+                    <option value="DLMO(District Legal Metrology Officer)">DLMO(District Legal Metrology Officer)</option>
                     <option value="Senior Metrological Officer (SMO)">Senior Metrological Officer (SMO)</option>
                     <option value="Assistant Controller">Assistant Controller</option>
                     <option value="Joint Controller of Legal Metrology">Joint Controller of Legal Metrology</option>

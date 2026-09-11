@@ -461,7 +461,7 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(targetUser);
     addToast({
       type: 'info',
-      title: `Switched to ${targetRole === 'dgm' ? 'Deputy General Manager (DGM)' : 'Field Inspector'} Mode`,
+      title: `Switched to ${targetRole === 'dgm' ? 'DLMO(District Legal Metrology Officer)' : 'Field Inspector'} Mode`,
       description: `Viewing workspace as ${targetUser.name} (${targetUser.division})`
     });
   };
@@ -560,7 +560,7 @@ export const AppProvider = ({ children }) => {
       dgmOfficerName: '',
       timeline: [
         { status: 'Submitted', timestamp: dateStr, note: `Request submitted by ${currentUser?.name || 'Inspector'}`, by: currentUser?.name || 'Inspector' },
-        { status: 'Pending Review', timestamp: dateStr, note: 'Routed to DGM Central Review Desk', by: 'System' }
+        { status: 'Pending Review', timestamp: dateStr, note: 'Routed to DLMO Central Review Desk', by: 'System' }
       ]
     };
 
@@ -577,20 +577,20 @@ export const AppProvider = ({ children }) => {
     addToast({
       type: 'success',
       title: 'Complaint / Request Submitted',
-      description: `Request ${newId} has been successfully routed to Deputy General Manager (DGM).`
+      description: `Request ${newId} has been successfully routed to DLMO(District Legal Metrology Officer).`
     });
 
     return newRequest;
   };
 
   /**
-   * DGM updates status, adds remarks, approves/rejects/resolves
+   * DLMO updates status, adds remarks, approves/rejects/resolves
    * Syncs back to inspector portal
    */
   const updateRequestStatusAndRemarks = async (requestId, newStatus, remarks) => {
     const now = new Date();
     const dateStr = now.toISOString().replace('T', ' ').substring(0, 16);
-    const dgmName = currentUser?.name || 'Dr. Anita Verma (DGM)';
+    const dgmName = currentUser?.name || 'Dr. Anita Verma (DLMO)';
 
     let updatedRecord = null;
 
@@ -601,14 +601,14 @@ export const AppProvider = ({ children }) => {
           updatedTimeline.push({
             status: newStatus,
             timestamp: dateStr,
-            note: remarks || `Status transitioned to ${newStatus} by DGM`,
+            note: remarks || `Status transitioned to ${newStatus} by DLMO`,
             by: dgmName
           });
         } else if (remarks && remarks !== req.dgmRemarks) {
           updatedTimeline.push({
             status: req.status,
             timestamp: dateStr,
-            note: `DGM added remarks: ${remarks}`,
+            note: `DLMO added remarks: ${remarks}`,
             by: dgmName
           });
         }
@@ -640,7 +640,7 @@ export const AppProvider = ({ children }) => {
     addToast({
       type: 'info',
       title: `Request ${requestId} Updated`,
-      description: `DGM updated status to: ${newStatus}. Reflected to respective inspector.`
+      description: `DLMO updated status to: ${newStatus}. Reflected to respective inspector.`
     });
 
     return updatedRecord;

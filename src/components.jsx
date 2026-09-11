@@ -62,24 +62,14 @@ import {
 // ==========================================
 export const Emblem = ({ className = 'h-8 w-8', size = 32 }) => {
   return (
-    <div className={`relative flex items-center justify-center ${className}`}>
-      <svg 
-        width={size} 
-        height={size} 
-        viewBox="0 0 48 48" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg"
-        className="text-emerald-800"
-      >
-        <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2.5" strokeDasharray="3 2" className="opacity-40" />
-        <circle cx="24" cy="24" r="19" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M24 8V38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M12 16H36" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        <path d="M12 16L7 25H17L12 16Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M36 16L31 25H41L36 16Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M16 38H32" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="24" cy="11" r="2" fill="currentColor" />
-      </svg>
+    <div className={`relative flex items-center justify-center shrink-0 ${className}`}>
+      <img 
+        src="/images/logo.png" 
+        alt="SURAKSHA1 Logo" 
+        style={size ? { width: size, height: size } : undefined}
+        className="w-full h-full object-contain" 
+        referrerPolicy="no-referrer"
+      />
     </div>
   );
 };
@@ -602,7 +592,7 @@ export const AboutModal = () => {
                 </span>
               </div>
               <h2 className="text-lg font-bold text-white mt-0.5">
-                About LexiScan
+                About Suraksha1
               </h2>
               <p className="text-xs text-emerald-100/90 font-normal">
                 Packaged Commodities Rules (PCR), 2011 & Legal Metrology Act, 2009
@@ -630,7 +620,7 @@ export const AboutModal = () => {
                   Objective & Regulatory Mandate
                 </h3>
                 <p className="text-slate-600 leading-relaxed text-xs">
-                  LexiScan is an automated AI-assisted enforcement platform engineered to inspect, extract, and validate mandatory consumer declarations on pre-packaged goods under the Ministry of Consumer Affairs, Food & Public Distribution.
+                  Suraksha1 is an automated AI-assisted enforcement platform engineered to inspect, extract, and validate mandatory consumer declarations on pre-packaged goods under the Ministry of Consumer Affairs, Food & Public Distribution.
                 </p>
               </div>
             </div>
@@ -995,7 +985,7 @@ export const FeaturesModal = () => {
                 </span>
               </div>
               <h2 className="text-lg font-bold text-white mt-0.5">
-                LexiScan Platform Features & Modules
+                Suraksha1 Platform Features & Modules
               </h2>
               <p className="text-xs text-emerald-100/90 font-normal">
                 Everything you need for automated packaged commodity compliance screening
@@ -1148,9 +1138,9 @@ export const Sidebar = ({ onCloseMobile }) => {
       { label: 'Help & SOP', page: 'help', icon: HelpIcon },
     ];
   } else {
-    // DGM: Poora Access
+    // DLMO: Full Access
     navItems = [
-      { label: 'DGM Command Center', page: 'dashboard', icon: LayoutDashboard },
+      { label: 'DLMO Command Center', page: 'dashboard', icon: LayoutDashboard },
       { 
         label: 'Inspector Requests', 
         page: 'requests', 
@@ -1182,11 +1172,11 @@ export const Sidebar = ({ onCloseMobile }) => {
           className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity"
           title="Go to Home Page"
         >
-          <Menu className="w-4 h-4 text-emerald-200" />
+          <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-7 h-7 object-contain bg-white rounded p-0.5 shrink-0" referrerPolicy="no-referrer" />
           <div className="flex flex-col">
-            <span className="font-bold text-base tracking-wide text-white leading-none">LexiScan</span>
+            <span className="font-bold text-base tracking-wide text-white leading-none">Suraksha1</span>
             <span className="text-[10px] text-emerald-300 font-medium">
-              {isDGM ? 'DGM Full Access' : isInspector ? 'Inspector Desk' : 'Citizen Verification'}
+              {isDGM ? 'DLMO Full Access' : isInspector ? 'Inspector Desk' : 'Citizen Verification'}
             </span>
           </div>
         </div>
@@ -1251,7 +1241,7 @@ export const Sidebar = ({ onCloseMobile }) => {
             {isConsumer 
               ? 'Zero Data Stored • Instant Check' 
               : isDGM 
-                ? 'Deputy General Manager (Full Access)' 
+                ? 'DLMO(District Legal Metrology Officer)' 
                 : (currentUser?.division || 'Inspector Checked Data')}
           </p>
         </div>
@@ -1311,8 +1301,8 @@ export const Navbar = ({ onToggleSidebar }) => {
 
   const getPageTitle = () => {
     switch (currentPage) {
-      case 'dashboard': return isDGM ? 'DGM Central Command Dashboard' : 'Inspector Dashboard';
-      case 'requests': return isDGM ? 'Central Inspector Requests Portal (DGM)' : 'Field Complaints & Action Requests';
+      case 'dashboard': return isDGM ? 'DLMO Central Command Dashboard' : 'Inspector Dashboard';
+      case 'requests': return isDGM ? 'Central Inspector Requests Portal (DLMO)' : 'Field Complaints & Action Requests';
       case 'scan': return 'Scan Product';
       case 'ecommerce-scan': return 'E-Commerce Link Scanner (Rule 6(10))';
       case 'analysis': return 'Analysis in Progress';
@@ -1327,14 +1317,14 @@ export const Navbar = ({ onToggleSidebar }) => {
       case 'rules': return 'Digital Legal Repository';
       case 'users': return 'Enforcement Officers & Inspectors';
       case 'help': return 'Help & Guidelines';
-      default: return 'LexiScan';
+      default: return 'Suraksha1';
     }
   };
 
   const getPageSubtitle = () => {
     switch (currentPage) {
-      case 'dashboard': return isDGM ? 'Statewide supervision and central request approval station' : 'Monitor inspections, violations, and filed request statuses';
-      case 'requests': return isDGM ? 'Central Authority: Review incoming complaints, issue compounding orders & seizure notices' : 'Submit field infractions and track Deputy General Manager (DGM) decisions';
+      case 'dashboard': return isDGM ? 'District-wide supervision and central request approval station' : 'Monitor inspections, violations, and filed request statuses';
+      case 'requests': return isDGM ? 'Central Authority: Review incoming complaints, issue compounding orders & seizure notices' : 'Submit field infractions and track DLMO(District Legal Metrology Officer) decisions';
       case 'scan': return 'Upload product image or capture using camera';
       case 'ecommerce-scan': return 'Audit digital e-commerce marketplace listings against Rule 6(10) requirements';
       case 'analysis': return 'Extracting packaging text and verifying rules...';
@@ -1347,7 +1337,7 @@ export const Navbar = ({ onToggleSidebar }) => {
       case 'analytics': return 'Detailed insights and analytics';
       case 'settings': return 'Manage your profile and preferences';
       case 'rules': return 'The Legal Metrology Act, 2009 & Packaged Commodities Rules, 2011';
-      case 'users': return 'State controllers, Deputy General Managers (DGM), and field inspectors';
+      case 'users': return 'State controllers, DLMO(District Legal Metrology Officer), and field inspectors';
       case 'help': return 'Inspector guide and legal metrology manual';
       default: return 'Legal Metrology (Packaged Commodities) Rules, 2011';
     }
@@ -1357,13 +1347,13 @@ export const Navbar = ({ onToggleSidebar }) => {
     {
       id: 1,
       title: 'Inspector Request #001 Queued',
-      desc: 'Amul Taaza Milk — Seizure notice requested for DGM sign-off.',
+      desc: 'Amul Taaza Milk — Seizure notice requested for DLMO sign-off.',
       time: '10m ago',
     },
     {
       id: 2,
-      title: 'DGM Compounding Approval #002',
-      desc: 'Maggi Noodles — DGM approved ₹25,000 compounding notice.',
+      title: 'DLMO Compounding Approval #002',
+      desc: 'Maggi Noodles — DLMO approved ₹25,000 compounding notice.',
       time: '45m ago',
     },
     {
@@ -1444,7 +1434,7 @@ export const Navbar = ({ onToggleSidebar }) => {
             {isNotificationsOpen && (
               <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50 text-xs">
                 <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between font-bold text-slate-800">
-                  <span>Enforcement Feed & DGM Desk</span>
+                  <span>Enforcement Feed & DLMO Desk</span>
                   <span className="text-[10px] bg-emerald-50 text-[#0b4d3c] px-2 py-0.5 rounded font-semibold">
                     Live Updates
                   </span>

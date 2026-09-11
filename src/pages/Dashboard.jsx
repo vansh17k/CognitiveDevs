@@ -112,16 +112,16 @@ export const Dashboard = () => {
             </span>
             <span className="text-xs text-slate-400">•</span>
             <span className="text-xs font-semibold text-slate-600">
-              Active Officer: <strong className="text-slate-900">{currentUser?.name}</strong> ({isDgm ? 'Deputy General Manager' : currentUser?.division})
+              Active Officer: <strong className="text-slate-900">{currentUser?.name}</strong> ({isDgm ? 'DLMO(District Legal Metrology Officer)' : currentUser?.division})
             </span>
           </div>
           <h2 className="text-lg font-bold text-slate-900 mt-1">
-            {isDgm ? 'Deputy General Manager (DGM) Central Command' : 'Inspector Field Compliance Desk'}
+            {isDgm ? 'DLMO(District Legal Metrology Officer) Central Command' : 'Inspector Field Compliance Desk'}
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             {isDgm 
               ? 'Central authority for inspecting packaged commodities, compounding offences, and reviewing field inspector complaints.' 
-              : 'Field-level packaging scanner, statutory declaration inspector, and direct DGM request escalation desk.'}
+              : 'Field-level packaging scanner, statutory declaration inspector, and direct DLMO request escalation desk.'}
           </p>
         </div>
 
@@ -132,7 +132,7 @@ export const Dashboard = () => {
             className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0d4734] bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 rounded-xl transition-colors cursor-pointer"
           >
             <ShieldAlert className="w-3.5 h-3.5" />
-            <span>{isDgm ? `Review Requests (${requestStats?.pending || 0} Pending)` : 'My Requests to DGM'}</span>
+            <span>{isDgm ? `Review Requests (${requestStats?.pending || 0} Pending)` : 'My Requests to DLMO'}</span>
           </button>
 
           <button
@@ -190,7 +190,7 @@ export const Dashboard = () => {
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-xs font-semibold">{isDgm ? 'Pending DGM Decisions' : 'My Requests to DGM'}</span>
+            <span className="text-xs font-semibold">{isDgm ? 'Pending DLMO Decisions' : 'My Requests to DLMO'}</span>
             <ShieldAlert className="w-4 h-4 text-amber-600" />
           </div>
           <div className="text-2xl font-black text-amber-600">

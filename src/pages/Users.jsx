@@ -18,10 +18,10 @@ import { INITIAL_USERS } from '../data.js';
 
 const INITIAL_OFFICERS = [
   { id: '1', name: 'Inspector Rajesh Sharma', email: 'inspector@lmcc.demo', role: 'Field Inspector', division: 'Central Zone - District 1', scansCount: 428, status: 'Active' },
-  { id: '2', name: 'Dr. Anita Verma (DGM)', email: 'admin@lmcc.demo', role: 'Deputy General Manager (DGM)', division: 'Central Authority & Legal Metrology HQ', scansCount: 1248, status: 'Active' },
+  { id: '2', name: 'Dr. Anita Verma (DLMO)', email: 'admin@lmcc.demo', role: 'DLMO(District Legal Metrology Officer)', division: 'Central Authority & Legal Metrology HQ', scansCount: 1248, status: 'Active' },
   { id: '3', name: 'Inspector Vikram Joshi', email: 'v.joshi@lmcc.demo', role: 'Field Inspector', division: 'Northern Division', scansCount: 312, status: 'Active' },
   { id: '4', name: 'Inspector Priya Patel', email: 'p.patel@lmcc.demo', role: 'Field Inspector', division: 'Western Sector', scansCount: 260, status: 'Active' },
-  { id: '5', name: 'Supervisory Officer Amit Roy', email: 'a.roy@lmcc.demo', role: 'Deputy General Manager (DGM)', division: 'Southern Zonal Hub', scansCount: 180, status: 'Active' },
+  { id: '5', name: 'Supervisory Officer Amit Roy', email: 'a.roy@lmcc.demo', role: 'DLMO(District Legal Metrology Officer)', division: 'Southern Zonal Hub', scansCount: 180, status: 'Active' },
 ];
 
 export const Users = () => {
@@ -77,10 +77,10 @@ export const Users = () => {
             </span>
           </div>
           <h2 className="text-base sm:text-lg font-bold text-slate-800 mt-1">
-            Enforcement Personnel & Deputy General Manager (DGM) Roster
+            Enforcement Personnel & DLMO(District Legal Metrology Officer) Roster
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Authorized Legal Metrology field inspectors, Deputy General Managers (DGM), and inspection jurisdictions.
+            Authorized Legal Metrology field inspectors, DLMO(District Legal Metrology Officer), and inspection jurisdictions.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export const Users = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search officers by name, role (DGM / Inspector), email, or division..."
+            placeholder="Search officers by name, role (DLMO / Inspector), email, or division..."
             className="w-full text-xs pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#0d4734] focus:outline-hidden"
           />
         </div>
@@ -137,11 +137,11 @@ export const Users = () => {
                   </td>
                   <td className="py-2.5 px-3.5">
                     <span className={`inline-flex items-center gap-1 font-semibold text-[11px] px-2 py-0.5 rounded ${
-                      officer.role.includes('DGM') || officer.role.includes('Deputy General Manager')
+                      officer.role.includes('DLMO') || officer.role.includes('DGM') || officer.role.includes('Deputy General Manager')
                         ? 'bg-emerald-100 text-emerald-900 border border-emerald-300'
                         : 'bg-slate-100 text-slate-800'
                     }`}>
-                      {officer.role.includes('DGM') || officer.role.includes('Deputy General Manager') ? (
+                      {officer.role.includes('DLMO') || officer.role.includes('DGM') || officer.role.includes('Deputy General Manager') ? (
                         <ShieldCheck className="w-3 h-3 text-emerald-700" />
                       ) : (
                         <UserCheck className="w-3 h-3 text-slate-500" />
@@ -215,7 +215,7 @@ export const Users = () => {
                   className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#0d4734] focus:outline-hidden text-xs cursor-pointer"
                 >
                   <option value="Field Inspector">Field Inspector</option>
-                  <option value="Deputy General Manager (DGM)">Deputy General Manager (DGM) - Central Authority</option>
+                  <option value="DLMO(District Legal Metrology Officer)">DLMO(District Legal Metrology Officer) - Central Authority</option>
                 </select>
               </div>
 

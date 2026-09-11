@@ -68,7 +68,7 @@ export const FboLayout = ({ children }) => {
       {/* Main Framework Grid */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* Deep Forest Emerald Green Sidebar (#063A2A / #04251A) matching the LexiScan screenshot */}
+        {/* Deep Forest Emerald Green Sidebar (#063A2A / #04251A) matching the Suraksha1 screenshot */}
         <aside className="hidden lg:flex flex-col w-64 bg-[#05291D] text-white select-none border-r border-[#0A4D38] shrink-0 justify-between">
           
           <div className="p-4 space-y-4">
@@ -78,12 +78,12 @@ export const FboLayout = ({ children }) => {
                 onClick={() => handleNav('fbo-dashboard')}
                 className="flex items-center gap-3 cursor-pointer group"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#047857] border border-emerald-400/40 text-white flex items-center justify-center shadow-xs">
-                  <Building2 className="w-5 h-5 text-emerald-100" />
+                <div className="w-9 h-9 rounded-xl bg-white border border-emerald-400/40 flex items-center justify-center p-0.5 shadow-xs shrink-0">
+                  <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <span className="font-extrabold text-white text-base tracking-wide block">FBO Portal</span>
-                  <span className="text-[10px] text-emerald-400 font-mono tracking-wider">LexiScan Enterprise</span>
+                  <span className="text-[10px] text-emerald-400 font-mono tracking-wider">Suraksha1 Enterprise</span>
                 </div>
               </div>
             </div>
@@ -245,10 +245,10 @@ export const FboLayout = ({ children }) => {
           {/* Footer */}
           <footer className="bg-white border-t border-slate-200 px-4 sm:px-8 py-3.5 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
             <div>
-              <strong>Legal Metrology & FBO Packaging Compliance Portal (LexiScan)</strong> — Ministry of Consumer Affairs, Food & Public Distribution.
+              <strong>Legal Metrology & FBO Packaging Compliance Portal (Suraksha1)</strong> — Ministry of Consumer Affairs, Food & Public Distribution.
             </div>
             <div className="flex items-center gap-4 text-xs">
-              <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">LexiScan Standard v2.6</span>
+              <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Suraksha1 Standard v2.6</span>
             </div>
           </footer>
 
@@ -263,12 +263,12 @@ export const FboLayout = ({ children }) => {
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#0A4D38]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#047857] flex items-center justify-center text-white font-bold border border-emerald-400/40 shadow-xs">
-                    <Building2 className="w-5 h-5 text-emerald-100" />
+                  <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center p-0.5 border border-emerald-400/40 shadow-xs shrink-0">
+                    <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                   </div>
                   <div>
                     <span className="font-bold text-base text-white block leading-tight">FBO Portal</span>
-                    <span className="text-[10px] text-emerald-400 font-mono">LexiScan Enterprise</span>
+                    <span className="text-[10px] text-emerald-400 font-mono">Suraksha1 Enterprise</span>
                   </div>
                 </div>
                 <button 

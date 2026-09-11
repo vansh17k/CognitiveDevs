@@ -76,12 +76,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
             onClick={() => { navigate('landing'); if (onClose) onClose(); }}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#047857] border border-emerald-400/40 flex items-center justify-center text-emerald-100 shadow-xs">
-              <Scale className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-emerald-400/40 flex items-center justify-center p-0.5 shadow-xs shrink-0">
+              <img src="/images/logo.png" alt="SURAKSHA1 Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-white text-base tracking-tight">LexiScan</span>
+                <span className="font-extrabold text-white text-base tracking-tight">Suraksha1</span>
                 <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#04251a] text-emerald-300 border border-emerald-500/30">
                   OFFICER
                 </span>
